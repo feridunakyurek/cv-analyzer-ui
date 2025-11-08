@@ -2,6 +2,173 @@
   text-align: center;
 }
 
+/* Page-level background that flows continuously left -> right so the
+   centered 1440px container appears seamless with outer areas. The
+   gradient splits visually at the center (50%) to reflect the two
+   column tones. */
+html, body{
+  height: 100%;
+  margin: 0;
+}
+
+/* Reserve vertical scrollbar space for stable centering */
+html{
+  overflow-y: scroll;
+}
+
+body{
+  position: relative;
+  min-height: 100vh;
+  /* layered background: horizontal left->right tones + subtle vertical darkening
+     to emulate the screenshot (darker top edges and a smooth horizontal blend). */
+  background:
+    linear-gradient(180deg, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.05) 35%, rgba(0,0,0,0.12) 100%),
+    linear-gradient(90deg, #071024 0%, #0A0F25 25%, #121A3A 48%, #16213E 52%, #16213E 100%);
+  background-attachment: fixed;
+}
+
+/* --- Split layout: left fixed, right flexible --- */
+.split-container{
+  display: flex;
+  min-height: 100vh;
+  width: 1440px; /* fixed total width */
+  max-width: 1440px;
+  margin: 0 auto; /* center the 1440px page */
+  box-sizing: border-box;
+}
+
+.split-container{
+  position: relative; /* for center divider */
+}
+
+.left-side{
+  /* exact 720px left column */
+  flex: 0 0 720px;
+  color: white;
+  /* transparent so body gradient shows through and remains seamless */
+  background: transparent;
+  display: flex;
+  /* align to top so we can control the exact top offset */
+  align-items: flex-start;
+  justify-content: center;
+  position: relative; /* needed for moon icon positioning */
+}
+
+.right-side{
+  /* exact 720px right column */
+  flex: 0 0 720px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: white;
+}
+
+/* Left column content styles to match the attached design */
+.left-content{
+  max-width: 540px;
+  padding-left: 56px;
+  padding-right: 32px;
+  /* reduce the top spacing: design used 240px, move content a bit upwards */
+  padding-top: 240px;
+}
+
+.moon-icon{
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,0.95);
+  font-size: 18px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.02);
+}
+
+.brand{
+  margin: 0 0 18px 0;
+  font-weight: 700;
+  line-height: 0.9;
+  font-size: clamp(48px, 9vw, 96px);
+  /* gradient text */
+  background: linear-gradient(90deg,#9900DD 0%,#58A6FF 50%, #9A6BFF 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-wrap: balance;
+}
+
+.subtitle{
+  color: rgba(255,255,255,0.92);
+  font-size: 28px;
+  margin-bottom: 18px;
+  line-height: 1.2;
+}
+.subtitle span{
+  font-weight: 600;
+}
+
+.lead{
+  color: rgba(255,255,255,0.75);
+  max-width: 520px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.left-footer{
+  position: absolute;
+  bottom: 10px;
+  left: 24px;
+  font-size: 11px;
+  color: rgba(255,255,255,0.5);
+}
+
+/* Responsive tweaks */
+@media (max-width: 900px){
+  .left-content{ padding-left: 32px; padding-top: 40px; }
+  .brand{ font-size: clamp(36px, 10vw, 72px); }
+  .subtitle{ font-size: 22px; }
+}
+
+/* subtle center divider inside the centered container to match the visual split */
+.split-container::before{
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  transform: translateX(-1px);
+  background: linear-gradient(180deg, rgba(0,0,0,0.45), rgba(255,255,255,0.02));
+  pointer-events: none;
+  mix-blend-mode: overlay;
+}
+
+/* Make common UI containers & inputs transparent so the section backgrounds show through */
+.left-side .MuiContainer-root,
+.right-side .MuiContainer-root,
+.left-side .MuiBox-root,
+.right-side .MuiBox-root{
+  background: transparent !important;
+}
+
+/* For filled inputs, keep slight translucency so inputs remain readable but don't appear solid white */
+.left-side .MuiFilledInput-root,
+.right-side .MuiFilledInput-root{
+  background: rgba(255,255,255,0.06) !important;
+}
+
+/* Mobile: stack vertically */
+@media (max-width: 900px){
+  .split-container{ width:100%; max-width:100%; flex-direction: column; }
+  .left-side{ flex: 0 0 auto; width:100%; padding:1.5rem; }
+  .right-side{ flex: 0 0 auto; width:100%; padding:1rem; }
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -14,7 +181,7 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #465263;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -24,8 +191,38 @@
   color: white;
 }
 
+.login{
+  margin: auto;
+  display: flex;
+  max-width: 340px;
+  margin-top: 200px;
+  flex-direction: column;
+}
+
+.loginButton{
+  width: 40%;
+  height: 40px;
+  margin-top: 20px;
+}
+
+/* Register link under the form */
+.register-line{
+  color: rgba(255,255,255,0.95);
+  margin-top: 6px; /* bring closer to the form */
+  font-size: 14px;
+}
+.register-line a.register-link{
+  color: #ffffff;
+  text-decoration: none; /* remove underline */
+  margin-left: 8px;
+  font-weight: 600;
+}
+.register-line a.register-link:hover{
+  text-decoration: underline; /* show underline on hover for affordance */
+}
+
 .App-link {
-  color: #61dafb;
+  color: #909a9c;
 }
 
 @keyframes App-logo-spin {

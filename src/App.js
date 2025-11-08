@@ -1,23 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import { Route, Routes } from "react-router";
+import "./App.css";
+import LogIn from "./pages/LogIn";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="split-container">
+      <aside className="left-side">
+        <div className="moon-icon">◐</div>
+        <div className="left-content">
+          <h1 className="brand">IntelliHire</h1>
+
+          <div className="subtitle">
+            <div>Yapay&nbsp;&nbsp;<span>Zeka</span>&nbsp;&nbsp;Destekli&nbsp;CV</div>
+            <div>Analizi</div>
+          </div>
+
+          <p className="lead">
+            AI destekli CV analiz ve sıralama sistemi — adayların özgeçmişlerini
+            yapay zekâ ile değerlendirir, pozisyon gereksinimlerine göre en uygun adayları sıralar.
+          </p>
+
+          <div className="left-footer">Developed with Spring Boot &amp; React | Powered by OpenAI</div>
+        </div>
+      </aside>
+
+      <main className="right-side">
+        <Routes>
+          <Route path="/" element={<LogIn />} />
+        </Routes>
+      </main>
     </div>
   );
 }
