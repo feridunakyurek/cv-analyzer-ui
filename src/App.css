@@ -90,7 +90,7 @@ body{
 }
 
 .brand{
-  margin: 0 0 18px 0;
+  margin: 0 0 40px 0;
   font-weight: 700;
   line-height: 0.9;
   font-size: clamp(48px, 9vw, 96px);
@@ -105,7 +105,7 @@ body{
 .subtitle{
   color: rgba(255,255,255,0.92);
   font-size: 28px;
-  margin-bottom: 18px;
+  margin-bottom: 40px;
   line-height: 1.2;
 }
 .subtitle span{
@@ -191,35 +191,7 @@ body{
   color: white;
 }
 
-.login{
-  margin: auto;
-  display: flex;
-  max-width: 340px;
-  margin-top: 200px;
-  flex-direction: column;
-}
 
-.loginButton{
-  width: 40%;
-  height: 40px;
-  margin-top: 20px;
-}
-
-/* Register link under the form */
-.register-line{
-  color: rgba(255,255,255,0.95);
-  margin-top: 6px; /* bring closer to the form */
-  font-size: 14px;
-}
-.register-line a.register-link{
-  color: #ffffff;
-  text-decoration: none; /* remove underline */
-  margin-left: 8px;
-  font-weight: 600;
-}
-.register-line a.register-link:hover{
-  text-decoration: underline; /* show underline on hover for affordance */
-}
 
 .App-link {
   color: #909a9c;
@@ -233,3 +205,4 @@ body{
     transform: rotate(360deg);
   }
 }
+

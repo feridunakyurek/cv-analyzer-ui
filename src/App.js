@@ -1,6 +1,8 @@
 import { Route, Routes } from "react-router";
 import "./App.css";
 import LogIn from "./pages/LogIn";
+import MainPage from "./pages/MainPage";
+import Register from "./pages/Register";
 
 function App() {
   return (
@@ -27,6 +29,8 @@ function App() {
       <main className="right-side">
         <Routes>
           <Route path="/" element={<LogIn />} />
+          <Route path="/mainpage" element={<MainPage />} />
+          <Route path="/register" element={<Register />} />
         </Routes>
       </main>
     </div>

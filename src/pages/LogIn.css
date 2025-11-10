@@ -1,0 +1,51 @@
+/* Styles specific to the LogIn page (moved out of App.css) */
+.login{
+  margin: auto;
+  display: flex;
+  max-width: 340px;
+  margin-top: 200px;
+  flex-direction: column;
+}
+
+.login-title{
+  margin: 0;
+  font-weight: 700;
+  font-size: 40px;
+  background: linear-gradient(90deg,#9A6BFF 0%,#58A6FF 50%, #9900DD 100%);
+  background-clip: text;
+  color: transparent;
+}
+
+.loginButton{
+  width: 40%;
+  height: 40px;
+  margin-top: 30px;
+}
+
+.register-line{
+  color: rgba(255,255,255,0.95);
+  margin-top: 6px; /* bring closer to the form */
+  font-size: 14px;
+}
+.register-line a.register-link{
+  color: #ffffff;
+  text-decoration: none; /* remove underline */
+  margin-left: 8px;
+  font-weight: 600;
+}
+.register-line a.register-link:hover{
+  text-decoration: underline; /* show underline on hover for affordance */
+}
+
+.login-divider{
+  width: 45%;
+  height: 2px;
+  background: rgba(255,255,255,0.2);
+  margin-top: 10px; /* space between title and divider */
+  margin-bottom: 20px; /* space between divider and textfields */
+  border-radius: 2px;
+}
+
+.login-field{
+  width: 45%;
+}

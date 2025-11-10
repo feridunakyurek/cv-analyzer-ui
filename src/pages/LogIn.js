@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import axios from "axios";
-import "../App.css";
+import "./LogIn.css";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
@@ -49,27 +49,30 @@ export default function LogIn() {
         display="flex"
         flexDirection="column"
         alignItems="center"
-        justifyContent="center"
         gap={2}
       >
-        <TextField
-          label="Kullanıcı Adı"
-          id="standard-basic"
-          variant="filled"
-          margin="normal"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          sx={{ width: "45%", background: "white" }}
-        />
+        <h2 className="login-title">Giriş Yap</h2>
+        <div className="login-divider" />
+          <TextField
+            className="login-field"
+            label="Kullanıcı Adı"
+            id="standard-basic"
+            variant="filled"
+            margin="none"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            sx={{ background: "white", borderRadius: "4px" }}
+          />
 
-        <TextField
-          label="Şifre"
-          variant="filled"
-          margin="normal"
-          type={showPassword ? "text" : "password"}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          sx={{ width: "45%", background: "white" }}
+          <TextField
+            className="login-field"
+            label="Şifre"
+            variant="filled"
+            margin="none"
+            type={showPassword ? "text" : "password"}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            sx={{ background: "white", borderRadius: "4px" }}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
@@ -85,7 +88,7 @@ export default function LogIn() {
             ),
           }}
         />
-        <Box>
+        <Box className="login-buttons" display="flex" justifyContent="center" alignItems="center" marginTop={2} >
           <Button
             variant="contained"
             startIcon={<FcGoogle />}
