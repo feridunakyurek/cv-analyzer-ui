@@ -42,27 +42,25 @@ body{
 }
 
 .left-side{
-  /* exact 720px left column */
   flex: 0 0 720px;
   color: white;
-  /* transparent so body gradient shows through and remains seamless */
   background: transparent;
   display: flex;
-  /* align to top so we can control the exact top offset */
   align-items: flex-start;
   justify-content: center;
-  position: relative; /* needed for moon icon positioning */
 }
 
-.right-side{
-  /* exact 720px right column */
+.right-side {
   flex: 0 0 720px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   background: transparent;
   color: white;
+  padding-top: 220px;
+  box-sizing: border-box;
 }
+
 
 /* Left column content styles to match the attached design */
 .left-content{
@@ -70,7 +68,7 @@ body{
   padding-left: 56px;
   padding-right: 32px;
   /* reduce the top spacing: design used 240px, move content a bit upwards */
-  padding-top: 240px;
+  padding-top: 220px;
 }
 
 .moon-icon{
@@ -104,7 +102,7 @@ body{
 
 .subtitle{
   color: rgba(255,255,255,0.92);
-  font-size: 28px;
+  font-size: 36px;
   margin-bottom: 40px;
   line-height: 1.2;
 }
@@ -115,7 +113,7 @@ body{
 .lead{
   color: rgba(255,255,255,0.75);
   max-width: 520px;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1.6;
 }
 

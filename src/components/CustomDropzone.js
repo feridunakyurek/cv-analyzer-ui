@@ -1,6 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
+import axios from "axios";
 import {
   Box,
   Typography,
@@ -10,44 +12,103 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import UploadFileRoundedIcon from "@mui/icons-material/UploadFileRounded";
+import {
+  uploadCvService,
+  deleteCvService,
+  getMyCvsService,
+} from "../services/CvService";
+import { useNavigate } from "react-router";
 
 export default function CustomDropzone({ onFileSelect }) {
   const [files, setFiles] = useState([]);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token"); // Tokenı sil
+    navigate("/"); // Login sayfasına yönlendir
+  };
 
   const onDrop = useCallback((acceptedFiles, rejectedFiles) => {
-    const newFiles = [];
-
-    // Başarılı dosyalar
+    // ACCEPTED FILES
     acceptedFiles.forEach((file) => {
-      newFiles.push({
-        file,
-        name: file.name,
-        size: file.size,
-        status: "loading",
-      });
+      const tempId = `${file.name}-${Date.now()}`;
 
-      // Simüle edilmiş yükleme
-      setTimeout(() => {
+      // Add to local state immediately
+      setFiles((prev) => [
+        ...prev,
+        {
+          id: tempId,
+          file,
+          name: file.name,
+          size: file.size,
+          status: "loading",
+          progress: 0,
+        },
+      ]);
+
+      // Call service
+      uploadCvService(file, (progressPercent) => {
+        // Progress update
         setFiles((prev) =>
           prev.map((f) =>
-            f.name === file.name ? { ...f, status: "complete" } : f
+            f.id === tempId ? { ...f, progress: progressPercent } : f
           )
         );
-      }, 2000);
-    });
+      }).then((result) => {
+        if (result.success) {
+          const returned = result.data || {};
 
-    // Hatalı dosyalar
-    rejectedFiles.forEach((file) => {
-      newFiles.push({
-        file: file.file,
-        name: file.file.name,
-        size: file.file.size,
-        status: "failed",
-        error: file.errors[0]?.message || "Dosya yüklenemedi (Geçersiz format)",
+          setFiles((prev) =>
+            prev.map((f) =>
+              f.id === tempId
+                ? {
+                    ...f,
+                    id: returned.id || tempId,
+                    status: "complete",
+                    progress: 100,
+                    remote: !!returned.id,
+                  }
+                : f
+            )
+          );
+
+          // Refresh list
+          try {
+            fetchMyCvs();
+          } catch {}
+        } else {
+          // Failed upload
+          setFiles((prev) =>
+            prev.map((f) =>
+              f.id === tempId
+                ? {
+                    ...f,
+                    status: "failed",
+                    progress: 100,
+                    error: result.error,
+                  }
+                : f
+            )
+          );
+        }
       });
     });
 
-    setFiles((prev) => [...prev, ...newFiles]);
+    // REJECTED FILES
+    rejectedFiles.forEach((r) => {
+      setFiles((prev) => [
+        ...prev,
+        {
+          id: `${r.file.name}-${Date.now()}`,
+          file: r.file,
+          name: r.file.name,
+          size: r.file.size,
+          status: "failed",
+          progress: 100,
+          error: r.errors[0]?.message || "Dosya yüklenemedi (Geçersiz format)",
+        },
+      ]);
+    });
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -60,12 +121,119 @@ export default function CustomDropzone({ onFileSelect }) {
     maxSize: 5 * 1024 * 1024,
   });
 
-  const handleRemove = (name) => {
-    setFiles((prev) => prev.filter((file) => file.name !== name));
+  useEffect(() => {
+    if (typeof onFileSelect === "function") {
+      onFileSelect(
+        files.map((f) => ({
+          id: f.id,
+          name: f.name || "Unnamed",
+          size: f.size || 0,
+          status: f.status,
+        }))
+      );
+    }
+  }, [files]);
+
+  const handleRemove = async (id) => {
+    const result = await deleteCvService(id);
+
+    if (result.success) {
+      setFiles((prev) => prev.filter((f) => f.id !== id));
+    } else {
+      console.error("Silme hatası:", result.error);
+    }
   };
+
+  // Load previously uploaded CVs from backend on mount
+  useEffect(() => {
+    let mounted = true;
+
+    getMyCvsService().then((result) => {
+      if (!mounted) return;
+
+      if (result.success) {
+        const list = result.data.map((item) => ({
+          id: item.id || item._id || item.filename || Date.now().toString(),
+          name:
+            item.name ||
+            item.originalName ||
+            item.filename ||
+            item.fileName ||
+            "Unnamed",
+          size: item.size || 0,
+          status: "complete",
+          progress: 100,
+          remote: true,
+        }));
+
+        setFiles((prev) => [...list, ...prev]);
+      }
+    });
+
+    return () => (mounted = false);
+  }, []);
+
+  // Fetch user's CVs from backend and merge into state
+  const fetchMyCvs = () => {
+    let mounted = true;
+
+    getMyCvsService().then((result) => {
+      if (!mounted) return;
+
+      if (result.success) {
+        const list = result.data.map((item) => ({
+          id:
+            item.id ||
+            item._id ||
+            item.filename ||
+            item.fileId ||
+            item.name ||
+            Date.now().toString(),
+          name:
+            item.name ||
+            item.originalName ||
+            item.filename ||
+            item.fileName ||
+            "Unnamed",
+          size: item.size || 0,
+          status: "complete",
+          progress: 100,
+          remote: true,
+        }));
+
+        setFiles((prev) => {
+          const localPending = prev.filter(
+            (p) => !p.remote && p.status !== "complete"
+          );
+          return [...list, ...localPending];
+        });
+      }
+    });
+
+    return () => (mounted = false);
+  };
+
+  // call initially
+  useEffect(() => {
+    fetchMyCvs();
+  }, []);
 
   return (
     <Box>
+      <button
+        onClick={handleLogout}
+        style={{
+          padding: "8px 14px",
+          background: "#d9534f",
+          color: "white",
+          border: "none",
+          borderRadius: "6px",
+          cursor: "pointer",
+        }}
+      >
+        Çıkış Yap
+      </button>
+
       <Paper
         {...getRootProps()}
         sx={{
@@ -102,20 +270,25 @@ export default function CustomDropzone({ onFileSelect }) {
             }}
           >
             <Box sx={{ flexGrow: 1 }}>
-              <Typography
-                variant="body2"
-                color={f.status === "failed" ? "error" : "text.primary"}
-                sx={{
-                  fontWeight: f.status === "failed" ? 600 : 400,
-                  color: "#FFFFFF",
-                }}
-              >
-                {f.status === "failed"
-                  ? "Upload failed."
-                  : f.name.length > 40
-                  ? f.name.substring(0, 37) + "..."
-                  : f.name}
-              </Typography>
+              {(() => {
+                const displayName = f.name || "Unnamed";
+                return (
+                  <Typography
+                    variant="body2"
+                    color={f.status === "failed" ? "error" : "text.primary"}
+                    sx={{
+                      fontWeight: f.status === "failed" ? 600 : 400,
+                      color: "#FFFFFF",
+                    }}
+                  >
+                    {f.status === "failed"
+                      ? "Upload failed."
+                      : displayName.length > 40
+                      ? displayName.substring(0, 37) + "..."
+                      : displayName}
+                  </Typography>
+                );
+              })()}
               <Typography
                 variant="caption"
                 color={
@@ -126,15 +299,15 @@ export default function CustomDropzone({ onFileSelect }) {
                     : "#FFFFFF"
                 }
               >
-                {(f.size / 1024).toFixed(0)} KB •{' '}
+                {((f.size || 0) / 1024).toFixed(0)} KB •{" "}
                 {f.status === "failed"
-                  ? 'Yükleme Başarısız'
+                  ? "Yükleme Başarısız"
                   : f.status === "loading"
-                  ? 'Yükleniyor...'
-                  : 'Tamamlandı'}
+                  ? "Yükleniyor..."
+                  : "Tamamlandı"}
                 {f.status === "failed"
-                  ? ' (Geçerli bir PDF/DOCX dosyası yükleyin.)'
-                  : ''}
+                  ? " (Geçerli bir PDF/DOCX dosyası yükleyin.)"
+                  : ""}
               </Typography>
 
               <LinearProgress
@@ -166,7 +339,7 @@ export default function CustomDropzone({ onFileSelect }) {
               />
             </Box>
 
-            <IconButton onClick={() => handleRemove(f.name)}>
+            <IconButton onClick={() => handleRemove(f.id)}>
               <DeleteIcon color="action" />
             </IconButton>
           </Box>

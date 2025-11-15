@@ -1,0 +1,22 @@
+
+.register-divider{
+  width: 45%;
+  height: 2px;
+  background: rgba(255,255,255,0.2);
+  margin-top: 10px; /* space between title and divider */
+  margin-bottom: 20px; /* space between divider and textfields */
+  border-radius: 2px;
+}
+
+.register-field{
+  width: 45%;
+}
+
+.register-title{
+  margin: 0;
+  font-weight: 700;
+  font-size: 40px;
+  background: linear-gradient(90deg,#9A6BFF 0%,#58A6FF 50%, #9900DD 100%);
+  background-clip: text;
+  color: transparent;
+}

@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from "react";
+import { useNavigate } from "react-router";
 import axios from "axios";
 import "./LogIn.css";
 import Box from "@mui/material/Box";
@@ -8,8 +9,9 @@ import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { Button, Container, Input } from "@mui/material";
+import { Button, Container } from "@mui/material";
 import { FcGoogle } from "react-icons/fc";
+import { loginService } from "../services/LogInService";
 
 export default function LogIn() {
   const [email, setEmail] = useState("");
@@ -19,6 +21,8 @@ export default function LogIn() {
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
+  const navigate = useNavigate();
+
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
@@ -26,53 +30,49 @@ export default function LogIn() {
   const handleLogin = async (e) => {
     e.preventDefault();
     setMessage("");
-    try {
-      const response = await axios.post(
-        "http://localhost:8080/api/v1/auth/login",
-        {
-          email,
-          password,
-        }
-      );
-      setToken(response.data.token);
+
+    const result = await loginService(email, password);
+
+    if (result.success) {
+      setToken(result.token);
+      localStorage.setItem("token", result.token);
+
       setMessage("Giriş başarılı! Token alındı.");
-      console.log("JWT Token:", response.data.token);
-    } catch (error) {
-      setMessage("Giriş başarısız. Lütfen e-posta ve şifrenizi kontrol edin.");
-      console.error("Giriş hatası:", error.response.data);
+      console.log("JWT Token:", result.token);
+
+      navigate("/mainpage");
+    } else {
+      setMessage(result.message);
     }
   };
 
   return (
     <Container>
-      <Box
-        display="flex"
-        flexDirection="column"
-        alignItems="center"
-        gap={2}
-      >
+      <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
         <h2 className="login-title">Giriş Yap</h2>
         <div className="login-divider" />
-          <TextField
-            className="login-field"
-            label="Kullanıcı Adı"
-            id="standard-basic"
-            variant="filled"
-            margin="none"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            sx={{ background: "white", borderRadius: "4px" }}
-          />
+        <TextField
+          className="login-field"
+          label="EMAİL"
+          id="login-email"
+          type="email"
+          variant="filled"
+          margin="none"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          sx={{ background: "white", borderRadius: "4px" }}
+        />
 
-          <TextField
-            className="login-field"
-            label="Şifre"
-            variant="filled"
-            margin="none"
-            type={showPassword ? "text" : "password"}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            sx={{ background: "white", borderRadius: "4px" }}
+        <TextField
+          className="login-field"
+          label="ŞİFRE"
+          id="login-password"
+          variant="filled"
+          margin="none"
+          type={showPassword ? "text" : "password"}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          sx={{ background: "white", borderRadius: "4px" }}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
@@ -88,7 +88,13 @@ export default function LogIn() {
             ),
           }}
         />
-        <Box className="login-buttons" display="flex" justifyContent="center" alignItems="center" marginTop={2} >
+        <Box
+          className="login-buttons"
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          marginTop={2}
+        >
           <Button
             variant="contained"
             startIcon={<FcGoogle />}
@@ -119,11 +125,14 @@ export default function LogIn() {
             variant="contained"
             onClick={handleLogin}
           >
-            Giriş Yap
+            <strong>Giriş Yap</strong>
           </Button>
         </Box>
-        <p className="register-line">Hesabın Yok Mu?
-          <a href="/register" className="register-link">Kayıt Ol!</a>
+        <p className="register-line">
+          Hesabın Yok Mu?
+          <a href="/register" className="register-link">
+            Kayıt Ol!
+          </a>
         </p>
       </Box>
     </Container>
