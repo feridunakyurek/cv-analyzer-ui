@@ -8,55 +8,44 @@ const getAuthHeaders = () => {
 };
 
 export const uploadCvService = async (file, onProgress) => {
-  if (!file) {
-    return {
-      success: false,
-      error: "Dosya bulunamadı.",
-    };
+  const token = localStorage.getItem("token");
+  if (!token) {
+    return { success: false, error: "Kullanıcı doğrulanmadı." };
   }
 
   const headers = {
-    ...getAuthHeaders(),
+    Authorization: `Bearer ${token}`,
     "Content-Type": "multipart/form-data",
   };
-
-  // Kullanıcı giriş yapmamışsa
-  if (!headers.Authorization) {
-    return {
-      success: false,
-      error: "Kullanıcı doğrulanmadı. Lütfen giriş yapın.",
-    };
-  }
 
   const formData = new FormData();
   formData.append("file", file);
 
   try {
-    const response = await axios.post(`${API_URL}/upload`, formData, {
-      headers,
-      onUploadProgress: (event) => {
-        if (onProgress && event.total) {
-          const percent = Math.round((event.loaded * 100) / event.total);
-          onProgress(percent);
+    const res = await axios.post(
+      "http://localhost:8080/api/cv/upload",
+      formData,
+      { headers, onUploadProgress: (e) => {
+          if (onProgress && e.total) {
+            onProgress(Math.round((e.loaded * 100) / e.total));
+          }
         }
-      },
-    });
+      }
+    );
 
     return {
       success: true,
-      data: response.data,
+      data: res.data.cvUpload
     };
 
   } catch (err) {
     return {
       success: false,
-      error:
-        err.response?.data?.message ||
-        err.message ||
-        "Dosya yüklenirken bir hata oluştu.",
+      error: err.response?.data?.message || "Yükleme hatası"
     };
   }
 };
+
 
 export const deleteCvService = async (id) => {
   if (!id) {
@@ -114,6 +103,26 @@ export const getMyCvsService = async () => {
         err.response?.data?.message ||
         err.message ||
         "CV listesi alınırken hata oluştu.",
+    };
+  }
+};
+
+export const analyzeCvService = async (cvId) => {
+  const token = localStorage.getItem("token");
+  const headers = token ? { Authorization: `Bearer ${token}` } : {};
+
+  try {
+    const res = await axios.post(
+      `http://localhost:8080/api/v1/evaluations/analyze/${cvId}`,
+      {},
+      { headers }
+    );
+
+    return { success: true, data: res.data };
+  } catch (err) {
+    return {
+      success: false,
+      error: err.response?.data?.message || "Analiz yapılamadı."
     };
   }
 };

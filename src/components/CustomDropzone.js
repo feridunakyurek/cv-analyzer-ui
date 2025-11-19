@@ -29,11 +29,9 @@ export default function CustomDropzone({ onFileSelect }) {
   };
 
   const onDrop = useCallback((acceptedFiles, rejectedFiles) => {
-    // ACCEPTED FILES
     acceptedFiles.forEach((file) => {
       const tempId = `${file.name}-${Date.now()}`;
 
-      // Add to local state immediately
       setFiles((prev) => [
         ...prev,
         {
@@ -94,7 +92,6 @@ export default function CustomDropzone({ onFileSelect }) {
       });
     });
 
-    // REJECTED FILES
     rejectedFiles.forEach((r) => {
       setFiles((prev) => [
         ...prev,
@@ -123,14 +120,10 @@ export default function CustomDropzone({ onFileSelect }) {
 
   useEffect(() => {
     if (typeof onFileSelect === "function") {
-      onFileSelect(
-        files.map((f) => ({
-          id: f.id,
-          name: f.name || "Unnamed",
-          size: f.size || 0,
-          status: f.status,
-        }))
-      );
+      const last = files[files.length - 1];
+      if (last && last.status === "complete" && last.remote) {
+        onFileSelect(last); // TEK OBJE gönder
+      }
     }
   }, [files]);
 
@@ -237,7 +230,7 @@ export default function CustomDropzone({ onFileSelect }) {
       <Paper
         {...getRootProps()}
         sx={{
-          p: 4,
+          p: 6,
           textAlign: "center",
           borderRadius: 2,
           cursor: "pointer",

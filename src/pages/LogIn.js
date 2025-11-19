@@ -1,15 +1,13 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
-import axios from "axios";
 import "./LogIn.css";
-import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { Button, Container } from "@mui/material";
+import { Box, Button, Container, Alert } from "@mui/material";
 import { FcGoogle } from "react-icons/fc";
 import { loginService } from "../services/LogInService";
 
@@ -37,12 +35,19 @@ export default function LogIn() {
       setToken(result.token);
       localStorage.setItem("token", result.token);
 
-      setMessage("Giriş başarılı! Token alındı.");
-      console.log("JWT Token:", result.token);
+      setMessage({
+        type: "success",
+        text: "Giriş başarılı! Ana Sayfaya Yönlendiriliyorsunuz...",
+      });
 
-      navigate("/mainpage");
+      setTimeout(() => {
+        navigate("/mainpage");
+      }, 1500);
     } else {
-      setMessage(result.message);
+      setMessage({
+        type: "error",
+        text: "Giriş başarısız. Lütfen e-posta ve şifrenizi kontrol edin.",
+      });
     }
   };
 
@@ -134,6 +139,12 @@ export default function LogIn() {
             Kayıt Ol!
           </a>
         </p>
+
+        {message && (
+          <Alert severity={message.type} sx={{ width: "45%", mt: 2 }}>
+            {message.text}
+          </Alert>
+        )}
       </Box>
     </Container>
   );
