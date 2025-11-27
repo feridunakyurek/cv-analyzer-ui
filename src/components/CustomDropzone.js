@@ -2,13 +2,14 @@
 /* eslint-disable no-unused-vars */
 import React, { useCallback, useState, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
-import axios from "axios";
 import {
   Box,
   Typography,
   Paper,
   LinearProgress,
   IconButton,
+  CircularProgress,
+  Tooltip,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import UploadFileRoundedIcon from "@mui/icons-material/UploadFileRounded";
@@ -16,12 +17,16 @@ import {
   uploadCvService,
   deleteCvService,
   getMyCvsService,
+  deleteEvaluationService,
 } from "../services/CvService";
 import { useNavigate } from "react-router";
+import InfoIcon from "@mui/icons-material/Info";
+import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 
-export default function CustomDropzone({ onFileSelect }) {
+export default function CustomDropzone({ onFileSelect, onInfoClick }) {
   const [files, setFiles] = useState([]);
   const navigate = useNavigate();
+  const [analyzingId, setAnalyzingId] = useState([]);
 
   const handleLogout = () => {
     localStorage.removeItem("token"); // Tokenı sil
@@ -55,6 +60,7 @@ export default function CustomDropzone({ onFileSelect }) {
       }).then((result) => {
         if (result.success) {
           const returned = result.data || {};
+          const realId = returned.id || tempId;
 
           setFiles((prev) =>
             prev.map((f) =>
@@ -69,6 +75,20 @@ export default function CustomDropzone({ onFileSelect }) {
                 : f
             )
           );
+
+          if (onFileSelect && returned.id) {
+            setAnalyzingId((prev) => [...prev, realId]);
+
+            Promise.resolve(
+              onFileSelect(returned)
+                .then(() => {
+                  setAnalyzingId((prev) => prev.filter((id) => id !== realId));
+                })
+                .catch(() => {
+                  setAnalyzingId((prev) => prev.filter((id) => id !== realId));
+                })
+            );
+          }
 
           // Refresh list
           try {
@@ -118,16 +138,8 @@ export default function CustomDropzone({ onFileSelect }) {
     maxSize: 5 * 1024 * 1024,
   });
 
-  useEffect(() => {
-    if (typeof onFileSelect === "function") {
-      const last = files[files.length - 1];
-      if (last && last.status === "complete" && last.remote) {
-        onFileSelect(last); // TEK OBJE gönder
-      }
-    }
-  }, [files]);
-
   const handleRemove = async (id) => {
+    const result2 = await deleteEvaluationService(id);
     const result = await deleteCvService(id);
 
     if (result.success) {
@@ -137,36 +149,6 @@ export default function CustomDropzone({ onFileSelect }) {
     }
   };
 
-  // Load previously uploaded CVs from backend on mount
-  useEffect(() => {
-    let mounted = true;
-
-    getMyCvsService().then((result) => {
-      if (!mounted) return;
-
-      if (result.success) {
-        const list = result.data.map((item) => ({
-          id: item.id || item._id || item.filename || Date.now().toString(),
-          name:
-            item.name ||
-            item.originalName ||
-            item.filename ||
-            item.fileName ||
-            "Unnamed",
-          size: item.size || 0,
-          status: "complete",
-          progress: 100,
-          remote: true,
-        }));
-
-        setFiles((prev) => [...list, ...prev]);
-      }
-    });
-
-    return () => (mounted = false);
-  }, []);
-
-  // Fetch user's CVs from backend and merge into state
   const fetchMyCvs = () => {
     let mounted = true;
 
@@ -188,7 +170,7 @@ export default function CustomDropzone({ onFileSelect }) {
             item.filename ||
             item.fileName ||
             "Unnamed",
-          size: item.size || 0,
+          size: item.size || item.fileSize || 0,
           status: "complete",
           progress: 100,
           remote: true,
@@ -206,7 +188,6 @@ export default function CustomDropzone({ onFileSelect }) {
     return () => (mounted = false);
   };
 
-  // call initially
   useEffect(() => {
     fetchMyCvs();
   }, []);
@@ -262,7 +243,7 @@ export default function CustomDropzone({ onFileSelect }) {
               mb: 1.5,
             }}
           >
-            <Box sx={{ flexGrow: 1 }}>
+            <Box sx={{ flexGrow: 1, mr: 2 }}>
               {(() => {
                 const displayName = f.name || "Unnamed";
                 return (
@@ -275,18 +256,21 @@ export default function CustomDropzone({ onFileSelect }) {
                     }}
                   >
                     {f.status === "failed"
-                      ? "Upload failed."
+                      ? "Yükleme Başarısız."
                       : displayName.length > 40
                       ? displayName.substring(0, 37) + "..."
                       : displayName}
                   </Typography>
                 );
               })()}
+
               <Typography
                 variant="caption"
                 color={
                   f.status === "failed"
                     ? "error"
+                    :analyzingId.includes(f.id)
+                    ? "#64B5F6"
                     : f.status === "complete"
                     ? "#81C784"
                     : "#FFFFFF"
@@ -297,6 +281,8 @@ export default function CustomDropzone({ onFileSelect }) {
                   ? "Yükleme Başarısız"
                   : f.status === "loading"
                   ? "Yükleniyor..."
+                  : analyzingId.includes(f.id)
+                  ? "Analiz Ediliyor..."
                   : "Tamamlandı"}
                 {f.status === "failed"
                   ? " (Geçerli bir PDF/DOCX dosyası yükleyin.)"
@@ -306,11 +292,7 @@ export default function CustomDropzone({ onFileSelect }) {
               <LinearProgress
                 variant="determinate"
                 value={
-                  f.status === "complete"
-                    ? 100
-                    : f.status === "failed"
-                    ? 100
-                    : 60
+                  f.status === "complete" || f.status === "failed" ? 100 : 60
                 }
                 sx={{
                   mt: 0.5,
@@ -326,15 +308,52 @@ export default function CustomDropzone({ onFileSelect }) {
                         ? "#EF5350"
                         : f.status === "loading"
                         ? "#64B5F6"
+                        : analyzingId.includes(f.id)
+                        ? "#64B5F6"
                         : "#81C784",
                   },
                 }}
               />
             </Box>
 
-            <IconButton onClick={() => handleRemove(f.id)}>
-              <DeleteIcon color="action" />
-            </IconButton>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <IconButton onClick={() => handleRemove(f.id)}>
+                <DeleteIcon sx={{ color: "#8C8C8C" }} />
+              </IconButton>
+
+              {analyzingId.includes(f.id) ? (
+                <Tooltip title="Yapay Zeka Analiz Ediyor...">
+                  <Box
+                    sx={{ position: "relative", display: "inline-flex", p: 1 }}
+                  >
+                    <CircularProgress size={24} sx={{ color: "#4fc3f7" }} />
+                    <Box
+                      sx={{
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        bottom: 0,
+                        right: 0,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <AutoAwesomeIcon sx={{ fontSize: 14, color: "white" }} />
+                    </Box>
+                  </Box>
+                </Tooltip>
+              ) : (
+
+                f.status === "complete" && (
+                  <Tooltip title="Analiz Sonucu">
+                    <IconButton onClick={() => onInfoClick(f.id)}>
+                      <InfoIcon sx={{ color: "#8C8C8C" }} />
+                    </IconButton>
+                  </Tooltip>
+                )
+              )}
+            </Box>
           </Box>
         ))}
       </Box>

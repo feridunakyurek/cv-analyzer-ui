@@ -35,7 +35,7 @@ export const uploadCvService = async (file, onProgress) => {
 
     return {
       success: true,
-      data: res.data.cvUpload
+      data: res.data
     };
 
   } catch (err) {
@@ -46,6 +46,38 @@ export const uploadCvService = async (file, onProgress) => {
   }
 };
 
+export const deleteEvaluationService = async (id) => {
+  if (!id) {
+    return {
+      success: false,
+      error: "Silinecek değerlendirme ID'si bulunamadı.",
+    };
+  }
+  const headers = getAuthHeaders();
+
+  if (!headers.Authorization) {
+    return {
+      success: false,
+      error: "Kullanıcı doğrulanmadı. Lütfen giriş yapın.",
+    };
+  }
+
+  try {
+    await axios.delete(`http://localhost:8080/api/v1/evaluations/delete/${id}`, { headers });
+    return {
+      success: true,
+    };
+  } catch (err) {
+    return {
+      success: false,
+      error:
+        err.response?.data?.message ||
+        err.message ||
+        "Değerlendirme silinirken bir hata oluştu.",
+    };
+  }
+
+}
 
 export const deleteCvService = async (id) => {
   if (!id) {

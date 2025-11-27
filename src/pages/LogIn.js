@@ -93,12 +93,12 @@ export default function LogIn() {
             ),
           }}
         />
+
         <Box
           className="login-buttons"
           display="flex"
           justifyContent="center"
           alignItems="center"
-          marginTop={2}
         >
           <Button
             variant="contained"
@@ -135,7 +135,7 @@ export default function LogIn() {
         </Box>
         <p className="register-line">
           Hesabın Yok Mu?
-          <a href="/register" className="register-link">
+          <a href="/register" className="ref-link">
             Kayıt Ol!
           </a>
         </p>

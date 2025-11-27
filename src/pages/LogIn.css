@@ -19,22 +19,21 @@
 .loginButton{
   width: 40%;
   height: 40px;
-  margin-top: 30px;
 }
 
 .register-line{
   color: rgba(255,255,255,0.95);
-  margin-top: 6px; /* bring closer to the form */
+  margin-top: 6px;
   font-size: 14px;
 }
-.register-line a.register-link{
+.register-line a.ref-link{
   color: #ffffff;
-  text-decoration: none; /* remove underline */
+  text-decoration: none;
   margin-left: 8px;
   font-weight: 600;
 }
-.register-line a.register-link:hover{
-  text-decoration: underline; /* show underline on hover for affordance */
+.register-line a.ref-link:hover{
+  text-decoration: underline;
 }
 
 .login-divider{
