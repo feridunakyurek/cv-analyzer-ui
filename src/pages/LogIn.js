@@ -7,9 +7,9 @@ import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { Box, Button, Container, Alert } from "@mui/material";
+import { Box, Button, Container, Alert, Snackbar } from "@mui/material";
 import { FcGoogle } from "react-icons/fc";
-import { loginService } from "../services/LogInService";
+import { loginService } from "../services/AuthService";
 
 export default function LogIn() {
   const [email, setEmail] = useState("");
@@ -21,34 +21,48 @@ export default function LogIn() {
 
   const navigate = useNavigate();
 
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "info",
+  });
+
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setMessage("");
 
     const result = await loginService(email, password);
 
     if (result.success) {
-      setToken(result.token);
       localStorage.setItem("token", result.token);
 
-      setMessage({
-        type: "success",
-        text: "Giriş başarılı! Ana Sayfaya Yönlendiriliyorsunuz...",
+      // Başarılı Giriş Mesajı
+      setSnackbar({
+        open: true,
+        message: "Giriş başarılı! Yönlendiriliyorsunuz...",
+        severity: "success",
       });
 
+      // 1.5 Saniye sonra yönlendir
       setTimeout(() => {
         navigate("/mainpage");
       }, 1500);
     } else {
-      setMessage({
-        type: "error",
-        text: "Giriş başarısız. Lütfen e-posta ve şifrenizi kontrol edin.",
+      // Hata Mesajı
+      setSnackbar({
+        open: true,
+        message: "Giriş başarısız. Lütfen bilgilerinizi kontrol edin.",
+        severity: "error",
       });
     }
+  };
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === "clickaway") return;
+    setSnackbar({ ...snackbar, open: false });
   };
 
   return (
@@ -140,11 +154,21 @@ export default function LogIn() {
           </a>
         </p>
 
-        {message && (
-          <Alert severity={message.type} sx={{ width: "45%", mt: 2 }}>
-            {message.text}
+        <Snackbar
+          open={snackbar.open}
+          autoHideDuration={3000} 
+          onClose={handleCloseSnackbar}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }} 
+        >
+          <Alert
+            onClose={handleCloseSnackbar}
+            severity={snackbar.severity}
+            variant="filled"
+            sx={{ width: "100%" }}
+          >
+            {snackbar.message}
           </Alert>
-        )}
+        </Snackbar>
       </Box>
     </Container>
   );

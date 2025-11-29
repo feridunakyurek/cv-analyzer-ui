@@ -1,9 +1,10 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import CustomDropzone from "../components/CustomDropzone";
 import CvAnalysisModal from "../components/AnalysisModal";
 import axios from "axios";
+import ProfileMenu from "../components/ProfileMenu";
 
 export default function MainPage() {
   const [modalOpen, setModalOpen] = React.useState(false);
@@ -26,7 +27,7 @@ export default function MainPage() {
       const modalData = {
         ...analyzeResponse.data,
         fileName: file.name || file.fileName || file.originalname,
-      }
+      };
 
       setAnalysisData(modalData);
       setModalOpen(true);
@@ -54,18 +55,21 @@ export default function MainPage() {
   };
 
   return (
-    <div className="flex-1 mainpage-center">
-      <Box sx={{ p: 4 }}>
-        <CustomDropzone
-          onFileSelect={handleFileSelect}
-          onInfoClick={handleInfoClick}
-        />
+    <Box>
+      <Box>
+        <ProfileMenu />
       </Box>
+
+      <CustomDropzone
+        onFileSelect={handleFileSelect}
+        onInfoClick={handleInfoClick}
+      />
+
       <CvAnalysisModal
         open={modalOpen}
         onClose={() => setModalOpen(false)}
         data={analysisData}
       />
-    </div>
+    </Box>
   );
 }

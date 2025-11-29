@@ -30,9 +30,9 @@ export default function CvAnalysisModal({ open, onClose, data }) {
   if (!data) return null;
 
   const getScoreColor = (score) => {
-    if (score >= 80) return "#4CAF50"; // Yeşil
-    if (score >= 50) return "#FF9800"; // Turuncu
-    return "#F44336"; // Kırmızı
+    if (score >= 80) return "#4CAF50";
+    if (score >= 50) return "#FF9800";
+    return "#F44336";
   };
 
   const scoreColor = getScoreColor(data.score);

@@ -4,7 +4,6 @@ import LogIn from "./pages/LogIn";
 import MainPage from "./pages/MainPage";
 import Register from "./pages/Register";
 import ProtectedRoute from "./components/ProtectedRoute";
-import ResetPassword from "./pages/ResetPassword";
 
 function App() {
   return (
@@ -45,7 +44,6 @@ function App() {
             }
           />
           <Route path="/register" element={<Register />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
         </Routes>
       </main>
     </div>

@@ -6,15 +6,13 @@ import IconButton from "@mui/material/IconButton";
 import Visibility from "@mui/icons-material/Visibility";
 import InputAdornment from "@mui/material/InputAdornment";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { registerService } from "../services/RegisterService";
+import { registerService } from "../services/AuthService";
 import { useNavigate } from "react-router-dom";
-
 
 export default function Register() {
   const [showPassword1, setShowPassword1] = React.useState(false);
   const [showPassword2, setShowPassword2] = React.useState(false);
   const [token, setToken] = useState(null);
-  
 
   const navigate = useNavigate();
 
@@ -37,10 +35,10 @@ export default function Register() {
   };
 
   const handleChange = (e) => {
-    const { id, value } = e.target;
+    const { name, value } = e.target; 
     setFormData((prevData) => ({
       ...prevData,
-      [id]: value,
+      [name]: value,
     }));
   };
 
@@ -115,20 +113,25 @@ export default function Register() {
       <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
         <h2 className="register-title">Kayıt Ol</h2>
         <div className="register-divider" />
+        
+        {/* Name Field */}
         <TextField
           className="register-field"
           label="AD"
           sx={{ background: "white", borderRadius: "4px" }}
-          id="register-name"
+          name="name" 
+          id="name"
           variant="filled"
           value={formData.name}
           onChange={handleChange}
           error={!!errors.name}
           helperText={errors.name}
         />
+
         <TextField
           className="register-field"
-          id="register-surname"
+          name="surname" 
+          id="surname"
           variant="filled"
           label="SOYAD"
           sx={{ background: "white", borderRadius: "4px" }}
@@ -137,24 +140,28 @@ export default function Register() {
           error={!!errors.surname}
           helperText={errors.surname}
         />
+
         <TextField
           className="register-field"
           label="EMAİL"
           type="email"
           sx={{ background: "white", borderRadius: "4px" }}
-          id="register-email"
+          name="email"
+          id="email"
           variant="filled"
           value={formData.email}
           onChange={handleChange}
           error={!!errors.email}
           helperText={errors.email}
         />
+
         <TextField
           className="register-field"
           label="ŞİFRE"
           type={showPassword1 ? "text" : "password"}
           sx={{ background: "white", borderRadius: "4px" }}
-          id="register-password"
+          name="password"
+          id="password"
           variant="filled"
           value={formData.password}
           onChange={handleChange}
@@ -175,11 +182,13 @@ export default function Register() {
             ),
           }}
         />
+
         <TextField
           className="register-field"
           label="ŞİFRE (TEKRAR)"
           type={showPassword2 ? "text" : "password"}
           sx={{ background: "white", borderRadius: "4px" }}
+          name="password2"
           id="password2"
           variant="filled"
           value={formData.password2}

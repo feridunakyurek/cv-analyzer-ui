@@ -10,6 +10,8 @@ import {
   IconButton,
   CircularProgress,
   Tooltip,
+  Alert,
+  Snackbar,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import UploadFileRoundedIcon from "@mui/icons-material/UploadFileRounded";
@@ -27,11 +29,11 @@ export default function CustomDropzone({ onFileSelect, onInfoClick }) {
   const [files, setFiles] = useState([]);
   const navigate = useNavigate();
   const [analyzingId, setAnalyzingId] = useState([]);
-
-  const handleLogout = () => {
-    localStorage.removeItem("token"); // Tokenı sil
-    navigate("/"); // Login sayfasına yönlendir
-  };
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
 
   const onDrop = useCallback((acceptedFiles, rejectedFiles) => {
     acceptedFiles.forEach((file) => {
@@ -139,13 +141,23 @@ export default function CustomDropzone({ onFileSelect, onInfoClick }) {
   });
 
   const handleRemove = async (id) => {
-    const result2 = await deleteEvaluationService(id);
+    await deleteEvaluationService(id);
     const result = await deleteCvService(id);
 
     if (result.success) {
       setFiles((prev) => prev.filter((f) => f.id !== id));
+
+      setSnackbar({
+        open: true,
+        message: "CV silme başarılı.",
+        severity: "success",
+      });
     } else {
-      console.error("Silme hatası:", result.error);
+      setSnackbar({
+        open: true,
+        message: "Cv silme başarısız, terkar deneyiniz.",
+        severity: "error",
+      });
     }
   };
 
@@ -188,30 +200,22 @@ export default function CustomDropzone({ onFileSelect, onInfoClick }) {
     return () => (mounted = false);
   };
 
+  const handleCloseSnackbar = () => {
+    setSnackbar({ ...snackbar, open: false });
+  };
+
   useEffect(() => {
     fetchMyCvs();
   }, []);
 
   return (
     <Box>
-      <button
-        onClick={handleLogout}
-        style={{
-          padding: "8px 14px",
-          background: "#d9534f",
-          color: "white",
-          border: "none",
-          borderRadius: "6px",
-          cursor: "pointer",
-        }}
-      >
-        Çıkış Yap
-      </button>
-
       <Paper
         {...getRootProps()}
         sx={{
           p: 6,
+          mt: 4,
+          position: "relative",
           textAlign: "center",
           borderRadius: 2,
           cursor: "pointer",
@@ -269,7 +273,7 @@ export default function CustomDropzone({ onFileSelect, onInfoClick }) {
                 color={
                   f.status === "failed"
                     ? "error"
-                    :analyzingId.includes(f.id)
+                    : analyzingId.includes(f.id)
                     ? "#64B5F6"
                     : f.status === "complete"
                     ? "#81C784"
@@ -317,9 +321,13 @@ export default function CustomDropzone({ onFileSelect, onInfoClick }) {
             </Box>
 
             <Box sx={{ display: "flex", alignItems: "center" }}>
-              <IconButton onClick={() => handleRemove(f.id)}>
-                <DeleteIcon sx={{ color: "#8C8C8C" }} />
-              </IconButton>
+              <Tooltip title="Dosyayı Sil">
+                <IconButton onClick={() => handleRemove(f.id)}>
+                  <DeleteIcon
+                    sx={{ color: "#8C8C8C", "&:hover": { color: "#FFFFFF" } }}
+                  />
+                </IconButton>
+              </Tooltip>
 
               {analyzingId.includes(f.id) ? (
                 <Tooltip title="Yapay Zeka Analiz Ediyor...">
@@ -344,11 +352,15 @@ export default function CustomDropzone({ onFileSelect, onInfoClick }) {
                   </Box>
                 </Tooltip>
               ) : (
-
                 f.status === "complete" && (
                   <Tooltip title="Analiz Sonucu">
                     <IconButton onClick={() => onInfoClick(f.id)}>
-                      <InfoIcon sx={{ color: "#8C8C8C" }} />
+                      <InfoIcon
+                        sx={{
+                          color: "#8C8C8C",
+                          "&:hover": { color: "#FFFFFF" },
+                        }}
+                      />
                     </IconButton>
                   </Tooltip>
                 )
@@ -357,6 +369,21 @@ export default function CustomDropzone({ onFileSelect, onInfoClick }) {
           </Box>
         ))}
       </Box>
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }} 
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackbar.severity}
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }
