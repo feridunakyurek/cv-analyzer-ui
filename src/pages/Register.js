@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import "./Register.css";
 import { Container, Box, Button, TextField, Alert } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
@@ -10,6 +11,8 @@ import { registerService } from "../services/AuthService";
 import { useNavigate } from "react-router-dom";
 
 export default function Register() {
+  const { t } = useTranslation();
+
   const [showPassword1, setShowPassword1] = React.useState(false);
   const [showPassword2, setShowPassword2] = React.useState(false);
   const [token, setToken] = useState(null);
@@ -35,7 +38,7 @@ export default function Register() {
   };
 
   const handleChange = (e) => {
-    const { name, value } = e.target; 
+    const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -50,20 +53,20 @@ export default function Register() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!email) {
-      newErrors.email = "Email zorunludur.";
+      newErrors.email = t('required_mail');
       isValid = false;
     } else if (!emailRegex.test(email)) {
-      newErrors.email = "Geçerli bir email formatı girin.";
+      newErrors.email = t('valid_mail');
       isValid = false;
     }
 
     if (!password) {
-      newErrors.password = "Lütfen Şifre Giriniz.";
+      newErrors.password = t('enter_password');
       isValid = false;
     }
 
     if (password !== password2) {
-      newErrors.password2 = "Şifreler eşleşmiyor.";
+      newErrors.password2 = t('errors_password_confirm');
       isValid = false;
     }
 
@@ -90,7 +93,7 @@ export default function Register() {
 
       setMessage({
         type: "success",
-        text: "Kayıt başarılı! Ana sayfaya yönlendiriliyorsunuz...",
+        text: t('success_register'),
       });
 
       setTimeout(() => {
@@ -101,7 +104,7 @@ export default function Register() {
         type: "error",
         text:
           result.message ||
-          "Kayıt işlemi sırasında beklenmedik bir hata oluştu.",
+          t('errors_register'),
       });
     }
 
@@ -111,15 +114,14 @@ export default function Register() {
   return (
     <Container>
       <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
-        <h2 className="register-title">Kayıt Ol</h2>
+        <h2 className="register-title">{t('register')}</h2>
         <div className="register-divider" />
-        
-        {/* Name Field */}
+
         <TextField
           className="register-field"
-          label="AD"
+          label={t('name')}
           sx={{ background: "white", borderRadius: "4px" }}
-          name="name" 
+          name="name"
           id="name"
           variant="filled"
           value={formData.name}
@@ -130,10 +132,10 @@ export default function Register() {
 
         <TextField
           className="register-field"
-          name="surname" 
+          name="surname"
           id="surname"
           variant="filled"
-          label="SOYAD"
+          label={t('surname')}
           sx={{ background: "white", borderRadius: "4px" }}
           value={formData.surname}
           onChange={handleChange}
@@ -143,7 +145,7 @@ export default function Register() {
 
         <TextField
           className="register-field"
-          label="EMAİL"
+          label={t('email')}
           type="email"
           sx={{ background: "white", borderRadius: "4px" }}
           name="email"
@@ -157,7 +159,7 @@ export default function Register() {
 
         <TextField
           className="register-field"
-          label="ŞİFRE"
+          label={t('password')}
           type={showPassword1 ? "text" : "password"}
           sx={{ background: "white", borderRadius: "4px" }}
           name="password"
@@ -185,7 +187,7 @@ export default function Register() {
 
         <TextField
           className="register-field"
-          label="ŞİFRE (TEKRAR)"
+          label={t('password2')}
           type={showPassword2 ? "text" : "password"}
           sx={{ background: "white", borderRadius: "4px" }}
           name="password2"
@@ -224,13 +226,10 @@ export default function Register() {
             marginLeft: "30%",
           }}
         >
-          <strong>KAYIT OL</strong>
+          <strong>{t('register')}</strong>
         </Button>
         {message && (
-          <Alert
-            severity={message.type}
-            sx={{ width: "45%", mt: 2 }}
-          >
+          <Alert severity={message.type} sx={{ width: "45%", mt: 2 }}>
             {message.text}
           </Alert>
         )}

@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Box,
   IconButton,
@@ -37,6 +38,8 @@ import InputAdornment from "@mui/material/InputAdornment";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 export default function ProfileMenu() {
+  const { t } = useTranslation();
+
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -55,8 +58,8 @@ export default function ProfileMenu() {
   const [loading, setLoading] = useState(false);
 
   const [userData, setUserData] = useState({
-    fullName: localStorage.getItem("fullName") || "Kullanıcı",
-    email: localStorage.getItem("userEmail") || "Yükleniyor...",
+    fullName: localStorage.getItem("fullName") || t('user'),
+    email: localStorage.getItem("userEmail") || " ",
   });
 
   const [showPassword1, setShowPassword1] = React.useState(false);
@@ -137,21 +140,21 @@ export default function ProfileMenu() {
     let isValid = true;
 
     if (!passData.current) {
-      errors.current = "Mevcut şifrenizi girmelisiniz.";
+      errors.current = t('errors_passowrd_current');
       isValid = false;
     }
 
     if (!passData.new) {
-      errors.new = "Yeni şifre boş olamaz.";
+      errors.new = t('errors_passowrd_new');
       isValid = false;
     }
 
     if (passData.new !== passData.confirm) {
-      errors.confirm = "Şifreler eşleşmiyor.";
+      errors.confirm = t('errors_passowrd_confirm');
       isValid = false;
     }
 
-    setPassErrors(errors); // Hataları state'e bas
+    setPassErrors(errors);
     return isValid;
   };
 
@@ -167,16 +170,14 @@ export default function ProfileMenu() {
     if (result.success) {
       setPassMessage({
         type: "success",
-        text: "Şifreniz başarıyla değiştirildi!",
+        text: t('changed_password'),
       });
       setTimeout(() => {
         closeChangePassDialog();
       }, 1500);
     } else {
-      // Backend hatası (Örn: Mevcut şifre yanlış) genel mesaj olarak gösterilir
-      // VEYA "Mevcut şifre yanlış" hatasını spesifik input altına da basabilirsin:
-      if (result.error.includes("Mevcut şifre")) {
-        setPassErrors({ current: "Mevcut şifreniz hatalı." });
+      if (result.error.includes(t('current'))) {
+        setPassErrors({ current: t('current_password_error') });
       } else {
         setPassMessage({ type: "error", text: result.error });
       }
@@ -193,7 +194,7 @@ export default function ProfileMenu() {
       localStorage.clear();
       navigate("/");
     } else {
-      alert("Hesap silinirken bir hata oluştu!");
+      alert(t("delete_account_error"));
       setIsDeleting(false);
       setDeleteDialogOpen(false);
     }
@@ -273,14 +274,14 @@ export default function ProfileMenu() {
           <ListItemIcon>
             <LockResetIcon fontSize="small" />
           </ListItemIcon>
-          <ListItemText>Şifremi Değiştir</ListItemText>
+          <ListItemText>{t('change_password')}</ListItemText>
         </MenuItem>
 
         <MenuItem onClick={handleLogout}>
           <ListItemIcon>
             <LogoutIcon fontSize="small" />
           </ListItemIcon>
-          <ListItemText>Çıkış Yap</ListItemText>
+          <ListItemText>{t('logout')}</ListItemText>
         </MenuItem>
 
         <Divider />
@@ -289,7 +290,7 @@ export default function ProfileMenu() {
           <ListItemIcon>
             <DeleteForeverIcon fontSize="small" color="error" />
           </ListItemIcon>
-          <ListItemText primary="Hesabı Sil" />
+          <ListItemText primary={t('delete_account')} />
         </MenuItem>
       </Menu>
 
@@ -307,7 +308,7 @@ export default function ProfileMenu() {
               boxShadow: "0px 10px 40px rgba(0,0,0,0.5)",
               minWidth: "400px",
               "& .MuiDialogContentText-root": {
-                color: "#CBD5E1", // Hafif kırık beyaz (Slate 300)
+                color: "#CBD5E1",
               },
             },
           },
@@ -329,15 +330,14 @@ export default function ProfileMenu() {
           }}
         >
           <WarningAmberIcon />
-          Hesabı Sil?
+          {t('delete_account_title')}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Hesabınızı kalıcı olarak silmek üzeresiniz. Bu işlem geri alınamaz
-            ve tüm CV'leriniz, analizleriniz silinecektir.
+           {t('delete_account_subtitle')}
             <br />
             <br />
-            <strong>Devam etmek istiyor musunuz?</strong>
+            <strong>{t('continue')}</strong>
           </DialogContentText>
         </DialogContent>
         <DialogActions sx={{ p: 2 }}>
@@ -346,7 +346,7 @@ export default function ProfileMenu() {
             color="primary"
             disabled={isDeleting}
           >
-            Vazgeç
+            {t('cancel')}
           </Button>
           <Button
             onClick={confirmDeleteAccount}
@@ -358,7 +358,7 @@ export default function ProfileMenu() {
               isDeleting ? <CircularProgress size={20} color="inherit" /> : null
             }
           >
-            {isDeleting ? "Siliniyor..." : "Evet, Hesabı Sil"}
+            {isDeleting ? t('being_deleted') : t('delete_account')}
           </Button>
         </DialogActions>
       </Dialog>
@@ -385,7 +385,7 @@ export default function ProfileMenu() {
         }}
       >
         <DialogTitle sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-          <LockResetIcon /> Şifremi Değiştir
+          <LockResetIcon /> {t('change_password')} 
         </DialogTitle>
 
         <DialogContent>
@@ -394,7 +394,7 @@ export default function ProfileMenu() {
             sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}
           >
             <TextField
-              label="Mevcut Şifre"
+              label={t('current_password')} 
               type={showPassword1 ? "text" : "password"}
               name="current"
               fullWidth
@@ -420,7 +420,7 @@ export default function ProfileMenu() {
             />
 
             <TextField
-              label="Yeni Şifre"
+              label={t('new_password')} 
               type={showPassword2 ? "text" : "password"}
               name="new"
               fullWidth
@@ -450,7 +450,7 @@ export default function ProfileMenu() {
             />
 
             <TextField
-              label="Yeni Şifre (Tekrar)"
+              label={t('new_password2')} 
               type={showPassword3 ? "text" : "password"}
               name="confirm"
               fullWidth
@@ -489,7 +489,7 @@ export default function ProfileMenu() {
             onClick={closeChangePassDialog}
             sx={{ color: "rgba(255,255,255,0.6)" }}
           >
-            İptal
+            {t('cancel')} 
           </Button>
           <Button
             onClick={handleSubmitPassword}
@@ -497,18 +497,18 @@ export default function ProfileMenu() {
             sx={{ bgcolor: "#1976D2" }}
             disabled={loading}
           >
-            {loading ? "Değiştiriliyor..." : "Değiştir"}
+            {loading ? t('being_changed')  : t('change')}
           </Button>
         </DialogActions>
       </Dialog>
 
       <Snackbar
         open={logoutSnackbarOpen}
-        autoHideDuration={2000} // 2 saniye sonra otomatik kapanır (zaten yönlenecek)
-        anchorOrigin={{ vertical: "top", horizontal: "center" }} // Üst ortada çıksın
+        autoHideDuration={2000} 
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
         <Alert severity="success" variant="filled" sx={{ width: "100%" }}>
-          Çıkış başarılı. Yönlendiriliyorsunuz...
+          {t('logout_confirm')} 
         </Alert>
       </Snackbar>
     </Box>

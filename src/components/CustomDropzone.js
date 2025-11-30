@@ -2,6 +2,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useCallback, useState, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
+import { useTranslation } from "react-i18next";
 import {
   Box,
   Typography,
@@ -26,6 +27,7 @@ import InfoIcon from "@mui/icons-material/Info";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 
 export default function CustomDropzone({ onFileSelect, onInfoClick }) {
+  const { t } = useTranslation();
   const [files, setFiles] = useState([]);
   const navigate = useNavigate();
   const [analyzingId, setAnalyzingId] = useState([]);
@@ -124,7 +126,7 @@ export default function CustomDropzone({ onFileSelect, onInfoClick }) {
           size: r.file.size,
           status: "failed",
           progress: 100,
-          error: r.errors[0]?.message || "Dosya yüklenemedi (Geçersiz format)",
+          error: r.errors[0]?.message || t('invalid_file'),
         },
       ]);
     });
@@ -149,13 +151,13 @@ export default function CustomDropzone({ onFileSelect, onInfoClick }) {
 
       setSnackbar({
         open: true,
-        message: "CV silme başarılı.",
+        message: t('delete_success'),
         severity: "success",
       });
     } else {
       setSnackbar({
         open: true,
-        message: "Cv silme başarısız, terkar deneyiniz.",
+        message: t('delete_error'),
         severity: "error",
       });
     }
@@ -229,10 +231,10 @@ export default function CustomDropzone({ onFileSelect, onInfoClick }) {
         <input {...getInputProps()} />
         <UploadFileRoundedIcon sx={{ fontSize: 40, color: "primary.main" }} />
         <Typography variant="h6" color="primary">
-          <strong>Dosya yükle veya sürükleyip bırak</strong>
+          <strong>{t('upload_title')}</strong>
         </Typography>
         <Typography variant="body2" color="#ADADAD">
-          <strong> PDF veya DOCX (max. 5MB)</strong>
+          <strong>{t('upload_desc')}</strong>
         </Typography>
       </Paper>
 
@@ -260,7 +262,7 @@ export default function CustomDropzone({ onFileSelect, onInfoClick }) {
                     }}
                   >
                     {f.status === "failed"
-                      ? "Yükleme Başarısız."
+                      ? t('upload_failed')
                       : displayName.length > 40
                       ? displayName.substring(0, 37) + "..."
                       : displayName}
@@ -282,14 +284,14 @@ export default function CustomDropzone({ onFileSelect, onInfoClick }) {
               >
                 {((f.size || 0) / 1024).toFixed(0)} KB •{" "}
                 {f.status === "failed"
-                  ? "Yükleme Başarısız"
+                  ? t('upload_failed')
                   : f.status === "loading"
-                  ? "Yükleniyor..."
+                  ? t('loading')
                   : analyzingId.includes(f.id)
-                  ? "Analiz Ediliyor..."
-                  : "Tamamlandı"}
+                  ? t('analysis')
+                  : t('completed')}
                 {f.status === "failed"
-                  ? " (Geçerli bir PDF/DOCX dosyası yükleyin.)"
+                  ? ` (${t('invalid_type_msg')})`
                   : ""}
               </Typography>
 
@@ -321,7 +323,7 @@ export default function CustomDropzone({ onFileSelect, onInfoClick }) {
             </Box>
 
             <Box sx={{ display: "flex", alignItems: "center" }}>
-              <Tooltip title="Dosyayı Sil">
+              <Tooltip title={t('delete_file')}>
                 <IconButton onClick={() => handleRemove(f.id)}>
                   <DeleteIcon
                     sx={{ color: "#8C8C8C", "&:hover": { color: "#FFFFFF" } }}
@@ -330,7 +332,7 @@ export default function CustomDropzone({ onFileSelect, onInfoClick }) {
               </Tooltip>
 
               {analyzingId.includes(f.id) ? (
-                <Tooltip title="Yapay Zeka Analiz Ediyor...">
+                <Tooltip title={t('icon_title')}>
                   <Box
                     sx={{ position: "relative", display: "inline-flex", p: 1 }}
                   >
@@ -353,7 +355,7 @@ export default function CustomDropzone({ onFileSelect, onInfoClick }) {
                 </Tooltip>
               ) : (
                 f.status === "complete" && (
-                  <Tooltip title="Analiz Sonucu">
+                  <Tooltip title={t('analysis_result')}>
                     <IconButton onClick={() => onInfoClick(f.id)}>
                       <InfoIcon
                         sx={{
@@ -373,7 +375,7 @@ export default function CustomDropzone({ onFileSelect, onInfoClick }) {
         open={snackbar.open}
         autoHideDuration={3000}
         onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }} 
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
         <Alert
           onClose={handleCloseSnackbar}

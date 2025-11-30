@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 import "./LogIn.css";
 import TextField from "@mui/material/TextField";
@@ -12,6 +13,8 @@ import { FcGoogle } from "react-icons/fc";
 import { loginService } from "../services/AuthService";
 
 export default function LogIn() {
+  const { t } = useTranslation();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
@@ -39,22 +42,19 @@ export default function LogIn() {
     if (result.success) {
       localStorage.setItem("token", result.token);
 
-      // Başarılı Giriş Mesajı
       setSnackbar({
         open: true,
-        message: "Giriş başarılı! Yönlendiriliyorsunuz...",
+        message: t('login_confirm'),
         severity: "success",
       });
 
-      // 1.5 Saniye sonra yönlendir
       setTimeout(() => {
         navigate("/mainpage");
       }, 1500);
     } else {
-      // Hata Mesajı
       setSnackbar({
         open: true,
-        message: "Giriş başarısız. Lütfen bilgilerinizi kontrol edin.",
+        message: t("login_error"),
         severity: "error",
       });
     }
@@ -68,11 +68,11 @@ export default function LogIn() {
   return (
     <Container>
       <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
-        <h2 className="login-title">Giriş Yap</h2>
+        <h2 className="login-title">{t('login')} </h2>
         <div className="login-divider" />
         <TextField
           className="login-field"
-          label="EMAİL"
+          label={t('email')} 
           id="login-email"
           type="email"
           variant="filled"
@@ -84,7 +84,7 @@ export default function LogIn() {
 
         <TextField
           className="login-field"
-          label="ŞİFRE"
+          label={t('password')} 
           id="login-password"
           variant="filled"
           margin="none"
@@ -130,7 +130,7 @@ export default function LogIn() {
               },
             }}
           >
-            Google ile Giriş Yap
+           {t('login_google')} 
           </Button>
 
           <Button
@@ -144,21 +144,21 @@ export default function LogIn() {
             variant="contained"
             onClick={handleLogin}
           >
-            <strong>Giriş Yap</strong>
+            <strong>{t('login')} </strong>
           </Button>
         </Box>
         <p className="register-line">
-          Hesabın Yok Mu?
+          {t('no_account')} 
           <a href="/register" className="ref-link">
-            Kayıt Ol!
+            {t('register')}! 
           </a>
         </p>
 
         <Snackbar
           open={snackbar.open}
-          autoHideDuration={3000} 
+          autoHideDuration={3000}
           onClose={handleCloseSnackbar}
-          anchorOrigin={{ vertical: "top", horizontal: "center" }} 
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
         >
           <Alert
             onClose={handleCloseSnackbar}

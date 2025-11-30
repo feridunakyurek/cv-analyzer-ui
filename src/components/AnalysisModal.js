@@ -8,6 +8,7 @@ import {
   IconButton,
   Icon,
 } from "@mui/material";
+import { useTranslation } from "react-i18next";
 import PsychologyIcon from "@mui/icons-material/Psychology";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -27,6 +28,8 @@ const style = {
 };
 
 export default function CvAnalysisModal({ open, onClose, data }) {
+  const { t } = useTranslation();
+
   if (!data) return null;
 
   const getScoreColor = (score) => {
@@ -86,7 +89,7 @@ export default function CvAnalysisModal({ open, onClose, data }) {
               fontWeight="bold"
               sx={{ lineHeight: 1.2 }}
             >
-              CV Analiz Sonucu
+              {t("modal_title")}
             </Typography>
             <Typography
               variant="subtitle1"
@@ -94,7 +97,7 @@ export default function CvAnalysisModal({ open, onClose, data }) {
               fontWeight="bold"
               sx={{ color: "#94A3B8" }}
             >
-              Yapak zekâ destekli değerlendirme sonuçları
+              {t("modal_subtitle")}
             </Typography>
           </Box>
         </Box>
@@ -119,7 +122,7 @@ export default function CvAnalysisModal({ open, onClose, data }) {
             fontWeight="bold"
             sx={{ color: scoreColor }}
           >
-            Skor: {data.score}%
+            {t("score")}: {data.score}%
           </Typography>
         </Box>
         <LinearProgress
@@ -142,7 +145,7 @@ export default function CvAnalysisModal({ open, onClose, data }) {
           gutterBottom
           sx={{ color: "#F1F5F9" }}
         >
-          Analiz Özeti
+          {t("modal_lead")}
         </Typography>
 
         <Typography

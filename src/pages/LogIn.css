@@ -22,9 +22,9 @@
 }
 
 .register-line{
-  color: rgba(255,255,255,0.95);
   margin-top: 6px;
   font-size: 14px;
+
 }
 .register-line a.ref-link{
   color: #ffffff;
@@ -40,8 +40,8 @@
   width: 45%;
   height: 2px;
   background: rgba(255,255,255,0.2);
-  margin-top: 10px; /* space between title and divider */
-  margin-bottom: 20px; /* space between divider and textfields */
+  margin-top: 10px;
+  margin-bottom: 20px;
   border-radius: 2px;
 }
 
