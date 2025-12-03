@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import "./Register.css";
+import "../styles/Register.css";
 import { Container, Box, Button, TextField, Alert } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import Visibility from "@mui/icons-material/Visibility";
@@ -33,6 +33,7 @@ export default function Register() {
 
   const handleShowPassword1 = () => setShowPassword1((prev) => !prev);
   const handleShowPassword2 = () => setShowPassword2((prev) => !prev);
+
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
@@ -53,20 +54,20 @@ export default function Register() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!email) {
-      newErrors.email = t('required_mail');
+      newErrors.email = t("required_mail");
       isValid = false;
     } else if (!emailRegex.test(email)) {
-      newErrors.email = t('valid_mail');
+      newErrors.email = t("valid_mail");
       isValid = false;
     }
 
     if (!password) {
-      newErrors.password = t('enter_password');
+      newErrors.password = t("enter_password");
       isValid = false;
     }
 
     if (password !== password2) {
-      newErrors.password2 = t('errors_password_confirm');
+      newErrors.password2 = t("errors_password_confirm");
       isValid = false;
     }
 
@@ -93,7 +94,7 @@ export default function Register() {
 
       setMessage({
         type: "success",
-        text: t('success_register'),
+        text: t("success_register"),
       });
 
       setTimeout(() => {
@@ -102,9 +103,7 @@ export default function Register() {
     } else {
       setMessage({
         type: "error",
-        text:
-          result.message ||
-          t('errors_register'),
+        text: result.message || t("errors_register"),
       });
     }
 
@@ -114,13 +113,12 @@ export default function Register() {
   return (
     <Container>
       <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
-        <h2 className="register-title">{t('register')}</h2>
+        <h2 className="register-title">{t("register")}</h2>
         <div className="register-divider" />
 
         <TextField
           className="register-field"
-          label={t('name')}
-          sx={{ background: "white", borderRadius: "4px" }}
+          label={t("name")}
           name="name"
           id="name"
           variant="filled"
@@ -135,8 +133,7 @@ export default function Register() {
           name="surname"
           id="surname"
           variant="filled"
-          label={t('surname')}
-          sx={{ background: "white", borderRadius: "4px" }}
+          label={t("surname")}
           value={formData.surname}
           onChange={handleChange}
           error={!!errors.surname}
@@ -145,9 +142,8 @@ export default function Register() {
 
         <TextField
           className="register-field"
-          label={t('email')}
+          label={t("email")}
           type="email"
-          sx={{ background: "white", borderRadius: "4px" }}
           name="email"
           id="email"
           variant="filled"
@@ -159,9 +155,8 @@ export default function Register() {
 
         <TextField
           className="register-field"
-          label={t('password')}
+          label={t("password")}
           type={showPassword1 ? "text" : "password"}
-          sx={{ background: "white", borderRadius: "4px" }}
           name="password"
           id="password"
           variant="filled"
@@ -187,9 +182,8 @@ export default function Register() {
 
         <TextField
           className="register-field"
-          label={t('password2')}
+          label={t("password2")}
           type={showPassword2 ? "text" : "password"}
-          sx={{ background: "white", borderRadius: "4px" }}
           name="password2"
           id="password2"
           variant="filled"
@@ -213,21 +207,23 @@ export default function Register() {
           }}
         />
 
-        <Button
-          type="submit"
-          onClick={handleSubmit}
-          disabled={loading}
-          size="medium"
-          variant="contained"
-          sx={{
-            padding: "6px 16px",
-            background: "#FFFFFF",
-            color: "#404040",
-            marginLeft: "30%",
-          }}
+        <Box
+          className="buttons"
+          display="flex"
+          justifyContent="flex-end"
+          alignItems="center"
         >
-          <strong>{t('register')}</strong>
-        </Button>
+          <Button
+            className="register-button"
+            onClick={handleSubmit}
+            disabled={loading}
+            size="medium"
+            variant="contained"
+          >
+            <strong>{t("register")}</strong>
+          </Button>
+        </Box>
+
         {message && (
           <Alert severity={message.type} sx={{ width: "45%", mt: 2 }}>
             {message.text}

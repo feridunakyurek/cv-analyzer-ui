@@ -1,139 +1,112 @@
+:root {
+  --bg-gradient: linear-gradient(180deg, #E8EEFF 0%, #D3DAF8 100%); /* Açık mavi-beyaz */
+  --split-overlay: linear-gradient(90deg, #E9EEFF 0%, #DDE6FF 100%);
+  
+  --text-primary: #1a2027;
+  --text-secondary: #5e6c79;
+  --text-brand-gradient: linear-gradient(90deg, #1976d2 0%, #9c27b0 100%);
+  
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: 1px solid rgba(0, 0, 0, 0.1);
+  
+  --dropzone-bg: rgba(0, 0, 0, 0.02);
+  --dropzone-border: rgba(0, 0, 0, 0.2);
+  --divider-color: rgba(0, 0, 0, 0.12);
+}
+
+[data-theme='dark'] {
+  --bg-gradient: 
+    linear-gradient(180deg, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.05) 35%, rgba(0,0,0,0.12) 100%),
+    linear-gradient(90deg, #071024 0%, #0A0F25 25%, #121A3A 48%, #16213E 52%, #16213E 100%);
+  
+  --split-overlay: none;
+  
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.75);
+  --text-brand-gradient: linear-gradient(90deg, #9900DD 0%, #58A6FF 50%, #9A6BFF 100%);
+  
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+
+  --dropzone-bg: rgba(255, 255, 255, 0.03);
+  --dropzone-border: rgba(255, 255, 255, 0.2);
+  --divider-color: rgba(255, 255, 255, 0.12);
+}
+
 .App {
   text-align: center;
 }
 
-/* Page-level background that flows continuously left -> right so the
-   centered 1440px container appears seamless with outer areas. The
-   gradient splits visually at the center (50%) to reflect the two
-   column tones. */
-html, body{
+html, body {
   height: 100%;
   margin: 0;
+  overflow-x: hidden;
 }
 
-/* Reserve vertical scrollbar space for stable centering */
-html{
+html {
   overflow-y: scroll;
 }
 
-body{
+body {
   position: relative;
   min-height: 100vh;
-  /* layered background: horizontal left->right tones + subtle vertical darkening
-     to emulate the screenshot (darker top edges and a smooth horizontal blend). */
-  background:
-    linear-gradient(180deg, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.05) 35%, rgba(0,0,0,0.12) 100%),
-    linear-gradient(90deg, #071024 0%, #0A0F25 25%, #121A3A 48%, #16213E 52%, #16213E 100%);
+  font-family: 'Roboto', sans-serif;
+  background: var(--bg-gradient); 
   background-attachment: fixed;
+  color: var(--text-primary);
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
-/* --- Split layout: left fixed, right flexible --- */
-.split-container{
+
+.split-container {
   display: flex;
   min-height: 100vh;
-  width: 1440px; /* fixed total width */
+  width: 100%; 
   max-width: 1440px;
-  margin: 0 auto; /* center the 1440px page */
+  margin: 0 auto;
   box-sizing: border-box;
+  position: relative;
 }
 
-.split-container{
-  position: relative; /* for center divider */
-}
-
-.left-side{
-  flex: 0 0 720px;
-  color: white;
-  background: transparent;
+.left-side, .right-side {
+  flex: 1;
   display: flex;
   align-items: flex-start;
   justify-content: center;
-}
-
-.right-side {
-  flex: 0 0 720px;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  background: transparent;
   color: white;
-  padding-top: 220px;
-  box-sizing: border-box;
+  background: transparent;
+  width: 50%; 
 }
 
-
-/* Left column content styles to match the attached design */
-.left-content{
+.left-content {
   max-width: 540px;
   padding-left: 56px;
   padding-right: 32px;
-  /* reduce the top spacing: design used 240px, move content a bit upwards */
   padding-top: 220px;
+  width: 100%;
 }
 
-.moon-icon{
-  position: absolute;
-  top: 18px;
-  left: 18px;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
+.right-side {
+  padding-top: 220px;
+  box-sizing: border-box;
+}
+
+.top-bar {
   display: flex;
   align-items: center;
-  justify-content: center;
-  color: rgba(255,255,255,0.95);
-  font-size: 18px;
-  border: 1px solid rgba(255,255,255,0.12);
-  background: rgba(255,255,255,0.02);
-}
-
-.brand{
-  margin: 0 0 40px 0;
-  font-weight: 700;
-  line-height: 0.9;
-  font-size: clamp(48px, 9vw, 96px);
-  /* gradient text */
-  background: linear-gradient(90deg,#9900DD 0%,#58A6FF 50%, #9A6BFF 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  text-wrap: balance;
-}
-
-.subtitle{
-  color: rgba(255,255,255,0.92);
-  font-size: 36px;
-  margin-bottom: 40px;
-  line-height: 1.2;
-}
-.subtitle span{
-  font-weight: 600;
-}
-
-.lead{
-  color: rgba(255,255,255,0.75);
-  max-width: 520px;
-  font-size: 16px;
-  line-height: 1.6;
-}
-
-.left-footer{
   position: absolute;
-  bottom: 10px;
-  left: 24px;
-  font-size: 11px;
-  color: rgba(255,255,255,0.5);
+  top: 20px;
+  left: 20px;
+  z-index: 10;
+  color: var(--text-primary); 
+  transition: color 0.3s ease;
 }
 
-/* Responsive tweaks */
-@media (max-width: 900px){
-  .left-content{ padding-left: 32px; padding-top: 40px; }
-  .brand{ font-size: clamp(36px, 10vw, 72px); }
-  .subtitle{ font-size: 22px; }
+.top-bar .MuiIconButton-root {
+  color: inherit !important; 
 }
 
-/* subtle center divider inside the centered container to match the visual split */
-.split-container::before{
+.split-container::before {
   content: "";
   position: absolute;
   left: 50%;
@@ -146,61 +119,204 @@ body{
   mix-blend-mode: overlay;
 }
 
-/* Make common UI containers & inputs transparent so the section backgrounds show through */
+.brand {
+  margin: 0 0 40px 0;
+  font-weight: 700;
+  line-height: 0.9;
+  font-size: clamp(3rem, 5vw, 6rem); 
+  background: var(--text-brand-gradient);
+  background-clip: text;
+  color: transparent;
+}
+
+.subtitle {
+  color: var(--text-primary);
+  font-size: 36px;
+  margin-bottom: 40px;
+  line-height: 1.2;
+}
+
+.subtitle span {
+  font-weight: 600;
+}
+
+.lead {
+  color: var(--text-secondary);
+  max-width: 520px;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.left-footer {
+  position: absolute;
+  bottom: 10px;
+  left: 24px;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
 .left-side .MuiContainer-root,
 .right-side .MuiContainer-root,
 .left-side .MuiBox-root,
-.right-side .MuiBox-root{
+.right-side .MuiBox-root {
   background: transparent !important;
 }
 
-/* For filled inputs, keep slight translucency so inputs remain readable but don't appear solid white */
 .left-side .MuiFilledInput-root,
-.right-side .MuiFilledInput-root{
+.right-side .MuiFilledInput-root {
   background: rgba(255,255,255,0.06) !important;
 }
 
-/* Mobile: stack vertically */
-@media (max-width: 900px){
-  .split-container{ width:100%; max-width:100%; flex-direction: column; }
-  .left-side{ flex: 0 0 auto; width:100%; padding:1.5rem; }
-  .right-side{ flex: 0 0 auto; width:100%; padding:1rem; }
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+  
+  -webkit-box-shadow: 0 0 0 30px var(--dropzone-bg) inset !important;
+  
+  -webkit-text-fill-color: var(--text-primary) !important;
+  
+  border-radius: 4px !important;
+  
+  transition: background-color 5000s ease-in-out 0s;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+[data-theme='dark'] input:-webkit-autofill,
+[data-theme='dark'] input:-webkit-autofill:hover, 
+[data-theme='dark'] input:-webkit-autofill:focus, 
+[data-theme='dark'] input:-webkit-autofill:active {
+  
+  -webkit-text-fill-color: #000000 !important;
+  
+  caret-color: #000 !important;
+  
+  border-radius: 0px !important; 
+  transition: background-color 5000s ease-in-out 0s;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+.MuiInputLabel-root {
+  transition: color 0.3s ease;
+}
+
+[data-theme='light'] .MuiInputLabel-root {
+  color: #5e6c79 !important;
+}
+
+[data-theme='dark'] .MuiInputLabel-root {
+  color: #94a3b8 !important;
+}
+
+.MuiInputBase-input {
+  background-color: transparent !important;
+}
+
+[data-theme='light'] .MuiInputBase-input {
+  color: #1a2027 !important;
+}
+
+[data-theme='dark'] .MuiInputBase-input {
+  color: #000000 !important;
+  caret-color: #ffffff !important
+}
+
+@media (max-width: 820px) {
+  .body{
+    background: var(--bg-gradient);
+    background-attachment: scroll;
+    color: white;
+  }
+  
+  .split-container {
+    flex-direction: column;
+    height: auto;
+    width: 100%;
+  }
+
+  .split-container::before {
+    display: none;
+  }
+
+  .left-side, .right-side {
+    width: 100%;
+    flex: none;
+    align-items: center;
+  }
+
+  .left-side {
+    padding: 60px 20px 20px 20px;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .left-content {
+    padding: 0;
+    padding-top: 40px;
+    max-width: 100%;
+  }
+
+
+  .right-side {
+    padding: 20px;
+    min-height: auto;
+  }
+  
+  .brand {
+    font-size: 3rem; 
+    margin-bottom: 20px;
+  }
+  
+  .subtitle {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+  
+  .lead {
+    font-size: 1rem;
+    margin: 0 auto;
+  }
+
+  .left-footer {
+    position: relative;
+    left: 0;
+    bottom: 0;
+    margin-top: 20px;
+    text-align: center;
+    width: 100%;
+  }
+
+  .left-footer{
+   display: none; 
   }
 }
 
-.App-header {
-  background-color: #465263;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
 
-
-
-.App-link {
-  color: #909a9c;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+@media (max-width: 480px) {
+  
+  .top-bar {
+    top: 10px;
+    left: 10px;
   }
-  to {
-    transform: rotate(360deg);
+
+  .brand {
+    font-size: 2.5rem;
+  }
+
+  .subtitle {
+    font-size: 1.2rem;
+  }
+
+  .right-side {
+    padding: 10px;
+  }
+
+  .login-buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .google-button,
+  .login-button {
+    width: 100% !important;
+    font-size: 0.85rem;
   }
 }
-

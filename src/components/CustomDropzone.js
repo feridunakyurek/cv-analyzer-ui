@@ -3,6 +3,7 @@
 import React, { useCallback, useState, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import { useTranslation } from "react-i18next";
+import "../styles/CustomDropzone.css";
 import {
   Box,
   Typography,
@@ -126,7 +127,7 @@ export default function CustomDropzone({ onFileSelect, onInfoClick }) {
           size: r.file.size,
           status: "failed",
           progress: 100,
-          error: r.errors[0]?.message || t('invalid_file'),
+          error: r.errors[0]?.message || t("invalid_file"),
         },
       ]);
     });
@@ -151,13 +152,13 @@ export default function CustomDropzone({ onFileSelect, onInfoClick }) {
 
       setSnackbar({
         open: true,
-        message: t('delete_success'),
+        message: t("delete_success"),
         severity: "success",
       });
     } else {
       setSnackbar({
         open: true,
-        message: t('delete_error'),
+        message: t("delete_error"),
         severity: "error",
       });
     }
@@ -213,42 +214,22 @@ export default function CustomDropzone({ onFileSelect, onInfoClick }) {
   return (
     <Box>
       <Paper
+        className={`dropzone ${isDragActive ? "active" : ""}`}
         {...getRootProps()}
-        sx={{
-          p: 6,
-          mt: 4,
-          position: "relative",
-          textAlign: "center",
-          borderRadius: 2,
-          cursor: "pointer",
-          transition: "all 0.2s ease-in-out",
-          backgroundColor: isDragActive
-            ? "rgba(227, 242, 253, 0.1)"
-            : "rgba(10, 15, 37, 0.4) ",
-          "&:hover": { backgroundColor: "#E3F2FD" },
-        }}
       >
         <input {...getInputProps()} />
-        <UploadFileRoundedIcon sx={{ fontSize: 40, color: "primary.main" }} />
+        <UploadFileRoundedIcon className="upload-icon" />
         <Typography variant="h6" color="primary">
-          <strong>{t('upload_title')}</strong>
+          <strong>{t("upload_title")}</strong>
         </Typography>
         <Typography variant="body2" color="#ADADAD">
-          <strong>{t('upload_desc')}</strong>
+          <strong>{t("upload_desc")}</strong>
         </Typography>
       </Paper>
 
-      <Box sx={{ mt: 3 }}>
+      <Box className="files">
         {files.map((f, index) => (
-          <Box
-            key={index}
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              mb: 1.5,
-            }}
-          >
+          <Box key={index} className="files-element">
             <Box sx={{ flexGrow: 1, mr: 2 }}>
               {(() => {
                 const displayName = f.name || "Unnamed";
@@ -258,11 +239,11 @@ export default function CustomDropzone({ onFileSelect, onInfoClick }) {
                     color={f.status === "failed" ? "error" : "text.primary"}
                     sx={{
                       fontWeight: f.status === "failed" ? 600 : 400,
-                      color: "#FFFFFF",
+                      color: "var(--text-secondary)",
                     }}
                   >
                     {f.status === "failed"
-                      ? t('upload_failed')
+                      ? t("upload_failed")
                       : displayName.length > 40
                       ? displayName.substring(0, 37) + "..."
                       : displayName}
@@ -284,15 +265,13 @@ export default function CustomDropzone({ onFileSelect, onInfoClick }) {
               >
                 {((f.size || 0) / 1024).toFixed(0)} KB •{" "}
                 {f.status === "failed"
-                  ? t('upload_failed')
+                  ? t("upload_failed")
                   : f.status === "loading"
-                  ? t('loading')
+                  ? t("loading")
                   : analyzingId.includes(f.id)
-                  ? t('analysis')
-                  : t('completed')}
-                {f.status === "failed"
-                  ? ` (${t('invalid_type_msg')})`
-                  : ""}
+                  ? t("analysis")
+                  : t("completed")}
+                {f.status === "failed" ? ` (${t("invalid_type_msg")})` : ""}
               </Typography>
 
               <LinearProgress
@@ -323,7 +302,7 @@ export default function CustomDropzone({ onFileSelect, onInfoClick }) {
             </Box>
 
             <Box sx={{ display: "flex", alignItems: "center" }}>
-              <Tooltip title={t('delete_file')}>
+              <Tooltip title={t("delete_file")}>
                 <IconButton onClick={() => handleRemove(f.id)}>
                   <DeleteIcon
                     sx={{ color: "#8C8C8C", "&:hover": { color: "#FFFFFF" } }}
@@ -332,7 +311,7 @@ export default function CustomDropzone({ onFileSelect, onInfoClick }) {
               </Tooltip>
 
               {analyzingId.includes(f.id) ? (
-                <Tooltip title={t('icon_title')}>
+                <Tooltip title={t("icon_title")}>
                   <Box
                     sx={{ position: "relative", display: "inline-flex", p: 1 }}
                   >
@@ -355,7 +334,7 @@ export default function CustomDropzone({ onFileSelect, onInfoClick }) {
                 </Tooltip>
               ) : (
                 f.status === "complete" && (
-                  <Tooltip title={t('analysis_result')}>
+                  <Tooltip title={t("analysis_result")}>
                     <IconButton onClick={() => onInfoClick(f.id)}>
                       <InfoIcon
                         sx={{

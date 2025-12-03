@@ -1,0 +1,33 @@
+.register-divider{
+  height: 2px;
+  width: 100%;
+  max-width: 500px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.register-field{
+  max-width: 500px;
+  width: 100%;
+  background: white;
+  border-radius: 4px;
+}
+
+.register-title{
+  margin: 0;
+  font-weight: 700;
+  font-size: 40px;
+  background: linear-gradient(90deg,#9A6BFF 0%,#58A6FF 50%, #9900DD 100%);
+  background-clip: text;
+  color: transparent;
+}
+
+.buttons{
+  max-width: 500px;
+  width: 100%;
+}
+.buttons .register-button{
+  background: #FFFFFF;
+  color: #404040;
+}
+

@@ -14,7 +14,7 @@ export default function LanguageSwitcher() {
     <Button 
         onClick={toggleLanguage} 
         sx={{ 
-            color: 'white', 
+            color: 'var(--text-primary)', 
             fontWeight: 'bold', 
             textTransform: 'none',
             fontSize: '1rem',

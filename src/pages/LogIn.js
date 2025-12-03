@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
-import "./LogIn.css";
+import "../styles/LogIn.css"
 import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -79,7 +79,6 @@ export default function LogIn() {
           margin="none"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          sx={{ background: "white", borderRadius: "4px" }}
         />
 
         <TextField
@@ -96,6 +95,9 @@ export default function LogIn() {
             endAdornment: (
               <InputAdornment position="end">
                 <IconButton
+                sx={{
+                  color:"#071024"
+                }}
                   aria-label="toggle password visibility"
                   onClick={handleClickShowPassword}
                   onMouseDown={handleMouseDownPassword}
@@ -110,47 +112,30 @@ export default function LogIn() {
 
         <Box
           className="login-buttons"
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
         >
           <Button
+            className= "google-button"
             variant="contained"
             startIcon={<FcGoogle />}
-            sx={{
-              padding: "6px 16px",
-              backgroundColor: "#fff",
-              color: "#1F1F1F",
-              textTransform: "none",
-              borderRadius: "30px",
-              boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
-              fontWeight: 500,
-              "&:hover": {
-                backgroundColor: "#f5f5f5",
-              },
-            }}
           >
-           {t('login_google')} 
+           <strong>{t('login_google')}</strong> 
           </Button>
 
           <Button
+            className="login-button"
             size="small"
-            sx={{
-              marginLeft: "15px",
-              padding: "6px 16px",
-              background: "#FFFFFF",
-              color: "#404040",
-            }}
             variant="contained"
             onClick={handleLogin}
           >
             <strong>{t('login')} </strong>
           </Button>
+          
         </Box>
+
         <p className="register-line">
           {t('no_account')} 
           <a href="/register" className="ref-link">
-            {t('register')}! 
+            {t('register')} 
           </a>
         </p>
 
