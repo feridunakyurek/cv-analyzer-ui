@@ -16,7 +16,7 @@ export default function Register() {
 
   const [showPassword1, setShowPassword1] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
-  const [token, setToken] = useState(null);
+  const [setToken] = useState(null);
 
   const [formData, setFormData] = useState({
     name: "",
