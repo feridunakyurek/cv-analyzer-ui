@@ -62,5 +62,7 @@
     "valid_mail": "Geçerli bir email formatı girin.",
     "enter_password": "Lütfen Şifre Giriniz.",
     "success_register": "Kayıt başarılı! Ana sayfaya yönlendiriliyorsunuz...",
-    "errors_register": "Kayıt işlemi sırasında beklenmedik bir hata oluştu."
+    "errors_register": "Kayıt işlemi sırasında beklenmedik bir hata oluştu.",
+    "has_account": "Hesabın var mı?"
+
 }

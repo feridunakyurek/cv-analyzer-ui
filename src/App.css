@@ -1,5 +1,5 @@
 :root {
-  --bg-gradient: linear-gradient(180deg, #E8EEFF 0%, #D3DAF8 100%); /* Açık mavi-beyaz */
+  --bg-gradient: linear-gradient(180deg, #E8EEFF 0%, #D3DAF8 20%); 
   --split-overlay: linear-gradient(90deg, #E9EEFF 0%, #DDE6FF 100%);
   
   --text-primary: #1a2027;
@@ -12,11 +12,17 @@
   --dropzone-bg: rgba(0, 0, 0, 0.02);
   --dropzone-border: rgba(0, 0, 0, 0.2);
   --divider-color: rgba(0, 0, 0, 0.12);
+
+  --modal-bg: #D3DAF8;
+  --modalData-bg: rgba(255,255,255,0.3);
+  --modalScore-bg: #E9EEFF;
+
+  --progressBar-bg: #E9EEFF;
 }
 
 [data-theme='dark'] {
   --bg-gradient: 
-    linear-gradient(180deg, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.05) 35%, rgba(0,0,0,0.12) 100%),
+    linear-gradient(180deg, hsla(0, 0%, 0%, 0.18) 0%, rgba(0,0,0,0.05) 35%, rgba(0,0,0,0.12) 100%),
     linear-gradient(90deg, #071024 0%, #0A0F25 25%, #121A3A 48%, #16213E 52%, #16213E 100%);
   
   --split-overlay: none;
@@ -31,6 +37,13 @@
   --dropzone-bg: rgba(255, 255, 255, 0.03);
   --dropzone-border: rgba(255, 255, 255, 0.2);
   --divider-color: rgba(255, 255, 255, 0.12);
+
+  --modal-bg: #0F172A;
+  --modalData-bg: rgba(255,255,255,0.02);
+  --modalScore-bg: rgba(16, 185, 129, 0.1);
+
+
+  --progressBar-bg: #1E293B;
 }
 
 .App {
@@ -54,7 +67,7 @@ body {
   background: var(--bg-gradient); 
   background-attachment: fixed;
   color: var(--text-primary);
-  transition: background 0.3s ease, color 0.3s ease;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
 
@@ -217,6 +230,35 @@ input:-webkit-autofill:active {
 [data-theme='dark'] .MuiInputBase-input {
   color: #000000 !important;
   caret-color: #ffffff !important
+}
+
+@keyframes theme-icon-spin {
+  0% {
+    transform: rotate(-90deg) scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: rotate(10deg) scale(1.2); 
+  }
+  100% {
+    transform: rotate(0deg) scale(1);
+    opacity: 1;
+  }
+}
+
+.theme-icon-anim {
+  animation: theme-icon-spin 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform-origin: center;
+  display: inline-flex;
+}
+
+*, *::before, *::after {
+  transition: background-color 0.4s ease-in-out,
+              color 0.4s ease-in-out,
+              border-color 0.4s ease-in-out,
+              fill 0.4s ease-in-out,
+              stroke 0.4s ease-in-out,
+              box-shadow 0.4s ease-in-out !important;
 }
 
 @media (max-width: 820px) {

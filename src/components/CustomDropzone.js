@@ -216,20 +216,36 @@ export default function CustomDropzone({ onFileSelect, onInfoClick }) {
       <Paper
         className={`dropzone ${isDragActive ? "active" : ""}`}
         {...getRootProps()}
+        sx={{
+          bgcolor: "var(--dropzone-bg)",
+          borderColor: "var(--dropzone-border)",
+          color: "var(--text-secondary)",
+        }}
       >
         <input {...getInputProps()} />
-        <UploadFileRoundedIcon className="upload-icon" />
-        <Typography variant="h6" color="primary">
+        <UploadFileRoundedIcon
+          className="upload-icon"
+          sx={{ color: "var(--text-secondary)", fontSize: 48, mb: 2 }}
+        />
+        <Typography variant="h6" color="var(--text-primary)">
           <strong>{t("upload_title")}</strong>
         </Typography>
-        <Typography variant="body2" color="#ADADAD">
+        <Typography variant="body2" color="var(--text-secondary)">
           <strong>{t("upload_desc")}</strong>
         </Typography>
       </Paper>
 
       <Box className="files">
         {files.map((f, index) => (
-          <Box key={index} className="files-element">
+          <Box
+            key={index}
+            className="files-element"
+            sx={{
+              bgcolor: "var(--modalData-bg)",
+              border: "1px solid var(--glass-border)",
+              color: "var(--text-primary)",
+            }}
+          >
             <Box sx={{ flexGrow: 1, mr: 2 }}>
               {(() => {
                 const displayName = f.name || "Unnamed";
@@ -239,7 +255,10 @@ export default function CustomDropzone({ onFileSelect, onInfoClick }) {
                     color={f.status === "failed" ? "error" : "text.primary"}
                     sx={{
                       fontWeight: f.status === "failed" ? 600 : 400,
-                      color: "var(--text-secondary)",
+                      color:
+                        f.status === "failed"
+                          ? "error.main"
+                          : "var(--text-primary)",
                     }}
                   >
                     {f.status === "failed"
@@ -253,15 +272,12 @@ export default function CustomDropzone({ onFileSelect, onInfoClick }) {
 
               <Typography
                 variant="caption"
-                color={
-                  f.status === "failed"
-                    ? "error"
-                    : analyzingId.includes(f.id)
-                    ? "#64B5F6"
-                    : f.status === "complete"
-                    ? "#81C784"
-                    : "#FFFFFF"
-                }
+                sx={{
+                  color:
+                    f.status === "failed"
+                      ? "error.main"
+                      : "var(--text-secondary)",
+                }}
               >
                 {((f.size || 0) / 1024).toFixed(0)} KB •{" "}
                 {f.status === "failed"
@@ -283,10 +299,7 @@ export default function CustomDropzone({ onFileSelect, onInfoClick }) {
                   mt: 0.5,
                   height: 6,
                   borderRadius: 1,
-                  backgroundColor:
-                    f.status === "failed"
-                      ? "rgba(244,67,54,0.2)"
-                      : "rgba(144,202,249,0.1)",
+                  backgroundColor: "var(--progressBar-bg)",
                   "& .MuiLinearProgress-bar": {
                     backgroundColor:
                       f.status === "failed"
@@ -305,7 +318,10 @@ export default function CustomDropzone({ onFileSelect, onInfoClick }) {
               <Tooltip title={t("delete_file")}>
                 <IconButton onClick={() => handleRemove(f.id)}>
                   <DeleteIcon
-                    sx={{ color: "#8C8C8C", "&:hover": { color: "#FFFFFF" } }}
+                    sx={{
+                      color: "var(--text-secondary)",
+                      "&:hover": { color: "error.main" },
+                    }}
                   />
                 </IconButton>
               </Tooltip>
@@ -328,7 +344,9 @@ export default function CustomDropzone({ onFileSelect, onInfoClick }) {
                         justifyContent: "center",
                       }}
                     >
-                      <AutoAwesomeIcon sx={{ fontSize: 14, color: "white" }} />
+                      <AutoAwesomeIcon
+                        sx={{ fontSize: 14, color: "var(--text-primary)" }}
+                      />
                     </Box>
                   </Box>
                 </Tooltip>
@@ -338,8 +356,8 @@ export default function CustomDropzone({ onFileSelect, onInfoClick }) {
                     <IconButton onClick={() => onInfoClick(f.id)}>
                       <InfoIcon
                         sx={{
-                          color: "#8C8C8C",
-                          "&:hover": { color: "#FFFFFF" },
+                          color: "var(--text-secondary)",
+                          "&:hover": { color: "#29b6f6" },
                         }}
                       />
                     </IconButton>
@@ -350,11 +368,12 @@ export default function CustomDropzone({ onFileSelect, onInfoClick }) {
           </Box>
         ))}
       </Box>
+      
       <Snackbar
         open={snackbar.open}
         autoHideDuration={3000}
         onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
       >
         <Alert
           onClose={handleCloseSnackbar}

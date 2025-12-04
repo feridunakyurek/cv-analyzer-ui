@@ -7,7 +7,6 @@ const ColorModeContext = createContext({ toggleColorMode: () => {} });
 export const useColorMode = () => useContext(ColorModeContext);
 
 export const ColorModeProvider = ({ children }) => {
-  // Varsayılan olarak kullanıcının tarayıcı tercihine bakabiliriz veya 'dark' başlatabiliriz.
   const [mode, setMode] = useState("dark");
 
   const colorMode = useMemo(

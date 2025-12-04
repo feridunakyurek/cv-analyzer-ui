@@ -1,9 +1,9 @@
 import React from "react";
-import { Route, Routes, useLocation } from "react-router";
+import { Route, Routes, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import "./App.css";
 import LogIn from "./pages/LogIn";
-import { Slide, Box } from "@mui/material";
+import { Box } from "@mui/material";
 import MainPage from "./pages/MainPage";
 import Register from "./pages/Register";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -44,28 +44,20 @@ function App() {
       </aside>
 
       <main className="right-side">
-        <Slide
-          direction="up"
-          in={true}
-          mountOnEnter
-          unmountOnExit
-          key={location.pathname}
-        >
-          <Box>
-            <Routes location={location}>
-              <Route path="/" element={<LogIn />} />
-              <Route
-                path="/mainpage"
-                element={
-                  <ProtectedRoute>
-                    <MainPage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route path="/register" element={<Register />} />
-            </Routes>
-          </Box>
-        </Slide>
+        <Box>
+          <Routes location={location}>
+            <Route path="/" element={<LogIn />} />
+            <Route
+              path="/mainpage"
+              element={
+                <ProtectedRoute>
+                  <MainPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/register" element={<Register />} />
+          </Routes>
+        </Box>
       </main>
     </div>
   );

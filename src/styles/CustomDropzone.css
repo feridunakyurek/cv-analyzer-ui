@@ -17,7 +17,7 @@
   background-color: rgba(88, 166, 255, 0.08);
   border-color: #58A6FF;
   color: #fff;
-  transform: translateY(-2px);
+  transform: translateY(-1px);
 }
 
 .MuiPaper-root.dropzone.active {
@@ -52,14 +52,13 @@
   background: rgba(255, 255, 255, 0.05);
   border-radius: 8px;
   border: 1px solid var(--text-secondary);
-
-        
 }
 
 @media (max-width: 768px) {
-  .body{
+  .body {
     background: var(--bg-gradient);
   }
+
   .MuiPaper-root.dropzone {
     padding: 2rem 1rem;
     margin-top: 1.5rem;

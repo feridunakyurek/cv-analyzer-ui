@@ -38,7 +38,8 @@ import {
   changePasswordService,
 } from "../services/AuthService";
 
-import "../styles/ProfileMenu.css"
+// CSS Dosyasını import ediyoruz
+import "../styles/ProfileMenu.css";
 
 export default function ProfileMenu() {
   const { t } = useTranslation();
@@ -191,7 +192,7 @@ export default function ProfileMenu() {
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
       >
-        <Avatar className="profile-avatar" >
+        <Avatar className="profile-avatar">
           <PersonIcon className="profile-avatar-icon" />
         </Avatar>
       </IconButton>
@@ -211,7 +212,7 @@ export default function ProfileMenu() {
           },
         }}
       >
-        <Box sx={{ px: 2, py: 1.5 }}>
+        <Box className="menu-user-info">
           <Typography variant="subtitle1" noWrap fontWeight="bold">
             {userData.fullName}
           </Typography>
@@ -224,14 +225,14 @@ export default function ProfileMenu() {
 
         <MenuItem onClick={openChangePassDialog}>
           <ListItemIcon>
-            <LockResetIcon fontSize="small" />
+            <LockResetIcon fontSize="small" className="menu-icon" />
           </ListItemIcon>
           <ListItemText>{t("change_password")}</ListItemText>
         </MenuItem>
 
         <MenuItem onClick={handleLogout}>
           <ListItemIcon>
-            <LogoutIcon fontSize="small" />
+            <LogoutIcon fontSize="small" className="menu-icon" />
           </ListItemIcon>
           <ListItemText>{t("logout")}</ListItemText>
         </MenuItem>
@@ -246,18 +247,16 @@ export default function ProfileMenu() {
         </MenuItem>
       </Menu>
 
+      {/* --- SİLME DİYALOĞU --- */}
       <Dialog
         open={deleteDialogOpen}
         onClose={closeDeleteDialog}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
         slotProps={{
           paper: { className: "custom-dialog-paper" },
           backdrop: { className: "custom-backdrop" },
         }}
       >
         <DialogTitle
-          id="alert-dialog-title"
           className="dialog-title-error"
           sx={{ display: "flex", alignItems: "center", gap: 1 }}
         >
@@ -265,7 +264,7 @@ export default function ProfileMenu() {
           {t("delete_account_title")}
         </DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
+          <DialogContentText className="dialog-text">
             {t("delete_account_subtitle")}
             <br />
             <br />
@@ -277,6 +276,7 @@ export default function ProfileMenu() {
             onClick={closeDeleteDialog}
             color="primary"
             disabled={isDeleting}
+            className="btn-cancel"
           >
             {t("cancel")}
           </Button>
@@ -297,6 +297,7 @@ export default function ProfileMenu() {
         </DialogActions>
       </Dialog>
 
+      {/* --- ŞİFRE DEĞİŞTİRME DİYALOĞU --- */}
       <Dialog
         open={changePassOpen}
         onClose={closeChangePassDialog}
@@ -305,18 +306,19 @@ export default function ProfileMenu() {
           backdrop: { className: "custom-backdrop-heavy" },
         }}
       >
-        <DialogTitle sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-          <LockResetIcon /> {t("change_password")}
+        <DialogTitle className="dialog-title">
+           <LockResetIcon sx={{ mr: 1 }} /> {t("change_password")}
         </DialogTitle>
 
         <DialogContent>
           <Box component="form" className="password-form-container">
+            {/* Inputlara 'profile-input' class'ı verdik, CSS'te ayarlayacağız */}
             <TextField
               label={t("current_password")}
               type={showPassword1 ? "text" : "password"}
               name="current"
               fullWidth
-              className="white-input"
+              className="profile-input" 
               variant="filled"
               onChange={handlePassChange}
               error={!!passErrors.current}
@@ -341,7 +343,7 @@ export default function ProfileMenu() {
               type={showPassword2 ? "text" : "password"}
               name="new"
               fullWidth
-              className="white-input"
+              className="profile-input"
               variant="filled"
               value={passData.new}
               onChange={handlePassChange}
@@ -367,7 +369,7 @@ export default function ProfileMenu() {
               type={showPassword3 ? "text" : "password"}
               name="confirm"
               fullWidth
-              className="white-input"
+              className="profile-input"
               variant="filled"
               value={passData.confirm}
               onChange={handlePassChange}
@@ -414,7 +416,7 @@ export default function ProfileMenu() {
       <Snackbar
         open={logoutSnackbarOpen}
         autoHideDuration={2000}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
       >
         <Alert severity="success" variant="filled" className="alert-full-width">
           {t("logout_confirm")}

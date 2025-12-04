@@ -8,12 +8,12 @@
   height: 45px;
   background-color: transparent;
   font-size: 1.2rem;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--glass-border);
 }
 
 .profile-menu-container .profile-avatar-icon {
   font-size: 30px;
-  color: var(--text-secondary);
+  color: var(--text-primary);
 }
 
 .account-menu-paper.MuiPaper-root {
@@ -21,6 +21,33 @@
   filter: drop-shadow(0px 2px 8px rgba(0, 0, 0, 0.32));
   margin-top: 12px;
   min-width: 220px;
+  
+  background-color: var(--modal-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--divider-color);
+}
+
+.account-menu-paper.MuiPaper-root::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 20px;
+  width: 10px;
+  height: 10px;
+  background-color: var(--modal-bg);
+  transform: translateY(-50%) rotate(45deg);
+  z-index: 0;
+  border-top: 1px solid var(--divider-color);
+  border-left: 1px solid var(--divider-color);
+}
+
+.menu-user-info {
+  padding: 12px 16px;
+}
+
+.account-menu-paper .menu-icon {
+  color: var(--text-secondary);
 }
 
 .menu-item-delete.MuiMenuItem-root {
@@ -28,31 +55,27 @@
 }
 
 .custom-dialog-paper.MuiPaper-root {
-  background-color: #1e293b;
+  background-color: var(--modal-bg);
+  color: var(--text-primary);
   border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.5);
-  min-width: 400px;
+  border: 1px solid var(--glass-border);
+  min-width: 320px;
+  max-width: 600px;
+  width: 100%;
 }
 
-.custom-dialog-paper .MuiDialogContentText-root,
-.custom-dialog-paper .MuiTypography-root,
-.custom-dialog-paper .MuiDialogTitle-root {
-  color: #cbd5e1;
+.custom-dialog-paper .dialog-title {
+  display: flex;
+  align-items: center;
+  color: var(--text-primary);
 }
 
 .custom-dialog-paper .dialog-title-error {
   color: #d32f2f;
 }
 
-.custom-backdrop.MuiBackdrop-root {
-  background-color: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(2px);
-}
-
-.custom-backdrop-heavy.MuiBackdrop-root {
-  background-color: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(4px);
+.custom-dialog-paper .dialog-text {
+  color: var(--text-secondary);
 }
 
 .password-form-container {
@@ -62,18 +85,34 @@
   margin-top: 8px;
 }
 
-/* Input arka planı */
-.white-input .MuiFilledInput-root {
-  background-color: white;
-  border-radius: 4px;
+.profile-input .MuiFilledInput-root {
+  background-color: var(--dropzone-bg);
+  border-radius: 8px;
 }
 
-.white-input .MuiInputBase-input {
-  color: rgba(0, 0, 0, 0.87);
+.profile-input .MuiFilledInput-root:hover,
+.profile-input .MuiFilledInput-root.Mui-focused {
+  background-color: var(--dropzone-bg);
+}
+
+.profile-input .MuiInputBase-input {
+  color: var(--text-primary);
+}
+
+.profile-input .MuiInputLabel-root {
+  color: var(--text-secondary);
+}
+
+.profile-input .MuiInputLabel-root.Mui-focused {
+  color: #1976d2;
+}
+
+.profile-input .MuiIconButton-root {
+  color: var(--text-secondary);
 }
 
 .btn-cancel.MuiButton-root {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary);
 }
 
 .btn-submit.MuiButton-root {
@@ -85,6 +124,12 @@
   background-color: #1565c0;
 }
 
-.alert-full-width.MuiAlert-root {
-  width: 100%;
+.custom-backdrop.MuiBackdrop-root {
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+}
+
+.custom-backdrop-heavy.MuiBackdrop-root {
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
 }

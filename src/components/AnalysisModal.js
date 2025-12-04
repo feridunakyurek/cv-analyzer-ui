@@ -6,25 +6,24 @@ import {
   Typography,
   LinearProgress,
   IconButton,
-  Icon,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import PsychologyIcon from "@mui/icons-material/Psychology";
 import CloseIcon from "@mui/icons-material/Close";
 
-const style = {
+const modalStyle = {
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: "90%",
   maxWidth: "600px",
-  bgcolor: "#0F172A",
-  color: "white",
+  bgcolor: "var(--modal-bg)",
+  color: "var(--text-primary)",
   borderRadius: "16px",
   boxShadow: "0px 20px 25px -5px rgba(0, 0, 0, 0.5)",
-  p: 4,
   outline: "none",
+  p: { xs: 3, md: 4 },
 };
 
 export default function CvAnalysisModal({ open, onClose, data }) {
@@ -48,20 +47,23 @@ export default function CvAnalysisModal({ open, onClose, data }) {
         backdrop: {
           sx: {
             backgroundColor: "rgba(0, 0, 0, 0.6)",
-            backdropFilter: "blur(2px)",
+            backdropFilter: "blur(4px)",
           },
         },
       }}
     >
-      <Box sx={style}>
+      <Box sx={modalStyle}>
         <IconButton
           onClick={onClose}
           sx={{
             position: "absolute",
             top: 16,
             right: 16,
-            color: "#94A3B8",
-            "&:hover": { color: "#FFFFFF", bgcolor: "rgba(255,255,255,0.1)" },
+            color: "var(--text-secondary)",
+            "&:hover": {
+              color: "var(--text-primary)",
+              bgcolor: "var(--dropzone-bg)",
+            },
           }}
         >
           <CloseIcon />
@@ -76,10 +78,12 @@ export default function CvAnalysisModal({ open, onClose, data }) {
               borderRadius: "12px",
               alignItems: "center",
               justifyContent: "center",
-              bgcolor: "rgba(255,255,255,0.05)",
+              bgcolor: "var(--dropzone-bg)",
             }}
           >
-            <PsychologyIcon sx={{ fontSize: 30, color: "#E2E8F0" }} />
+            <PsychologyIcon
+              sx={{ fontSize: 30, color: "var(--text-secondary)" }}
+            />
           </Box>
 
           <Box>
@@ -87,7 +91,11 @@ export default function CvAnalysisModal({ open, onClose, data }) {
               variant="h4"
               component="h2"
               fontWeight="bold"
-              sx={{ lineHeight: 1.2 }}
+              sx={{
+                lineHeight: 1.2,
+                color: "var(--text-primary)",
+                fontSize: { xs: "1.5rem", md: "2.125rem" },
+              }}
             >
               {t("modal_title")}
             </Typography>
@@ -95,26 +103,29 @@ export default function CvAnalysisModal({ open, onClose, data }) {
               variant="subtitle1"
               component="p"
               fontWeight="bold"
-              sx={{ color: "#94A3B8" }}
+              sx={{ color: "var(--text-secondary)" }}
             >
               {t("modal_subtitle")}
             </Typography>
           </Box>
         </Box>
 
-        <Typography variant="body2" sx={{ mb: 1, color: "#E2E8F0" }}>
+        <Typography
+          variant="body2"
+          sx={{ mb: 1, color: "var(--text-secondary)" }}
+        >
           {data.fileName || data.cvUpload?.fileName || " "}
         </Typography>
 
         <Box
           sx={{
             display: "inline-block",
-            bgcolor: "rgba(16, 185, 129, 0.1)",
+            bgcolor: `color-mix(in srgb, ${scoreColor}, transparent 90%)`,
             px: 1.5,
             py: 0.5,
             borderRadius: "6px",
             mb: 1,
-            border: `1px solid ${"rgba(16, 185, 129, 0.2)"}`,
+            border: `1px solid ${scoreColor}`,
           }}
         >
           <Typography
@@ -125,13 +136,14 @@ export default function CvAnalysisModal({ open, onClose, data }) {
             {t("score")}: {data.score}%
           </Typography>
         </Box>
+
         <LinearProgress
           variant="determinate"
           value={data.score}
           sx={{
             height: 8,
             borderRadius: 5,
-            bgcolor: "#1E293B",
+            bgcolor: "var(--progressBar-bg)",
             mb: 4,
             "& .MuiLinearProgress-bar": {
               backgroundColor: scoreColor,
@@ -139,28 +151,31 @@ export default function CvAnalysisModal({ open, onClose, data }) {
             },
           }}
         />
+
         <Typography
           variant="subtitle1"
           fontWeight="bold"
           gutterBottom
-          sx={{ color: "#F1F5F9" }}
+          sx={{ color: "var(--text-primary)" }}
         >
           {t("modal_lead")}
         </Typography>
 
-        <Typography
-          variant="body2"
+        <Box
           sx={{
-            color: "#94A3B8",
+            color: "var(--text-secondary)",
             lineHeight: 1.6,
-            backgroundColor: "rgba(255,255,255,0.02)",
+            backgroundColor: "var(--modalData-bg)",
             p: 2,
             borderRadius: "8px",
-            border: "1px solid rgba(255,255,255,0.05)",
+            border: "1px solid var(--glass-border)",
+            maxHeight: "200px",
+            overflowY: "auto",
+            fontSize: "0.875rem",
           }}
         >
           {data.analysisSummary}
-        </Typography>
+        </Box>
       </Box>
     </Modal>
   );

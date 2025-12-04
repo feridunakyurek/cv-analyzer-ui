@@ -66,17 +66,19 @@ export default function LogIn() {
   };
 
   return (
-    <Container>
-      <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
+    <Container maxWidth="sm">
+      <Box className="login-container">
+
         <h2 className="login-title">{t('login')} </h2>
         <div className="login-divider" />
+
         <TextField
           className="login-field"
           label={t('email')} 
           id="login-email"
           type="email"
+          fullWidth
           variant="filled"
-          margin="none"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
@@ -86,11 +88,9 @@ export default function LogIn() {
           label={t('password')} 
           id="login-password"
           variant="filled"
-          margin="none"
           type={showPassword ? "text" : "password"}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          sx={{ background: "white", borderRadius: "4px" }}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
@@ -143,7 +143,8 @@ export default function LogIn() {
           open={snackbar.open}
           autoHideDuration={3000}
           onClose={handleCloseSnackbar}
-          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+          sx={{ mt: 2, mr: 2, color: "var(--text-primary)" }}
         >
           <Alert
             onClose={handleCloseSnackbar}

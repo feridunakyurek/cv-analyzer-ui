@@ -62,5 +62,6 @@
     "valid_mail": "Please enter a valid email format.",
     "enter_password": "Please enter a password.",
     "success_register": "Registration successful! Redirecting to main page...",
-    "errors_register": "An unexpected error occurred during registration."
+    "errors_register": "An unexpected error occurred during registration.",
+    "has_account": "Do you have an account?"
 }
