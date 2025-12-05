@@ -31,10 +31,10 @@ Başarılı olduğunda tarayıcınız otomatik olarak http://localhost:3000 adre
 ## 3.Uygulama Kullanımı ve Test Senaryosu
 Arayüz açıldığında aşağıdaki adımları takip ederek sistemi test edebilirsiniz.
 ### Adım Adım Kullanım:
-#### 1.Giriş Ekranı(Login)
+#### 1.Giriş Ekranı(Login) ve Kayıt Ol(Register)
 * Tarayıcıda http://localhost:3000/ (login endpointi) açılır.
-* İster kayıt formunu kullanarak kayıt oluşturun.
-* Başarılı girişte sistem JWT token'ı hafızaya alır ve Dashboard'a yönlendirir.
+* Kayıt formunu kullanarak kayıt oluşturun.
+* Başarılı girişte ve kayıt işleminde sistem JWT token'ı hafızaya alır ve ana sayfaya yönlendirir.
 
 #### 2. Dosya Yükleme (Upload):
 * Sürükle-Bırak alanına (react-dropzone) bir PDF veya Word dosyası bırakın veya açılır pencereden dosyanızı seçin.
