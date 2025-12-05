@@ -1,6 +1,6 @@
 # CV Analysis UI  
 
-![React](https://img.shields.io/badge/React-19-61DAFB) ![Material_UI](https://img.shields.io/badge/MUI-v7-007FFF) ![Tailwind_CSS](https://img.shields.io/badge/Tailwind-CSS-06B6D4) ![i18next](https://img.shields.io/badge/i18n-Multi_Language-green) ![License](https://img.shields.io/badge/License-MIT-yellow)
+![React](https://img.shields.io/badge/React-19-61DAFB) ![Material_UI](https://img.shields.io/badge/MUI-v7-007FFF) ![Tailwind_CSS](https://img.shields.io/badge/Tailwind-CSS-06B6D4) ![i18next](https://img.shields.io/badge/i18n-Multi_Language-green)
 
 ### 🛠️ Bu proje aşağıdaki teknolojiler üzerine inşa edilmiştir (Bkz: `package.json`):
 
