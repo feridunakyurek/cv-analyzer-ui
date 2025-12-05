@@ -1,70 +1,51 @@
-# Getting Started with Create React App
+# CV Analysis UI  
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+![React](https://img.shields.io/badge/React-19-61DAFB) ![Material_UI](https://img.shields.io/badge/MUI-v7-007FFF) ![Tailwind_CSS](https://img.shields.io/badge/Tailwind-CSS-06B6D4) ![i18next](https://img.shields.io/badge/i18n-Multi_Language-green) ![License](https://img.shields.io/badge/License-MIT-yellow)
 
-## Available Scripts
+### 🛠️ Bu proje aşağıdaki teknolojiler üzerine inşa edilmiştir (Bkz: `package.json`):
 
-In the project directory, you can run:
+* **Core:** React 19, React Router DOM
+* **UI Framework:** Material UI (MUI v7), Tailwind CSS
+* **HTTP Client:** Axios (API Bağlantısı)
+* **Araçlar:** React Dropzone (Dosya Yükleme), i18next (Çoklu Dil)
+* **Test:** React Testing Library, Jest
+---
 
-### `npm start`
+## ⚙️ Kurulum ve Ayarlar
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Projeyi çalıştırmadan önce aşağıdaki ayarları yapmanız gerekmektedir.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 1. Bağımlılıkları Yükleme
+Proje klasöründe terminali açın ve gerekli paketleri indirin:
 
-### `npm test`
+```bash
+npm install
+```
+## 2. Çalıştırma
+Geliştirme sunucusunu başlatmak için:
+```bash
+npm start
+```
+Başarılı olduğunda tarayıcınız otomatik olarak http://localhost:3000 adresine yönlenecektir.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 3.Uygulama Kullanımı ve Test Senaryosu
+Arayüz açıldığında aşağıdaki adımları takip ederek sistemi test edebilirsiniz.
+### Adım Adım Kullanım:
+#### 1.Giriş Ekranı(Login)
+* Tarayıcıda http://localhost:3000/ (login endpointi) açılır.
+* İster kayıt formunu kullanarak kayıt oluşturun.
+* Başarılı girişte sistem JWT token'ı hafızaya alır ve Dashboard'a yönlendirir.
 
-### `npm run build`
+#### 2. Dosya Yükleme (Upload):
+* Sürükle-Bırak alanına (react-dropzone) bir PDF veya Word dosyası bırakın veya açılır pencereden dosyanızı seçin.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+*Not: Bu işlem sırasında Backend'e dosya gönderilir ve Gemini AI analizi beklenir.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+#### 3.Sonuçları Görüntüleme (Modal):
+* Analiz tamamlandığında sonuç ekranı belirir.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+* AI tarafından verilen puanı, teknik yetkinlik analizini modal üzerinde inceleyin.
 
-### `npm run eject`
+#### 4.Dil (i18n) ve Tema Değiştirme: 
+* Sayfanın sol üst kısmındaki TR/EN butonuna tıklayarak sayfanın dilini değiştirebilir ve Güneş/Ay iconuna tıklayarak Koyu ve Aydınlık temalar arasında gezinebilirsiniz.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
